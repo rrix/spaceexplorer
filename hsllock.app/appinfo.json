@@ -1,9 +1,0 @@
-{
-  "id": "si.rix.enyotasks",
-  "version": "0.01",
-  "vendor": "Rix.si",
-  "type": "web",
-  "main": "index.html",
-  "title": "EnyoTasks",
-  "uiRevision": "2"
-}
