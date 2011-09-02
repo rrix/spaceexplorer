@@ -3,7 +3,7 @@ enyo.kind({
     kind: "VFlexBox",
     components: [
         {name: "getLockStatus", kind: "WebService",
-            url: "http://172.22.110.15/~access/cgi-bin/access.rb",
+            url: "http://hsl-access/~access/cgi-bin/access.rb",
             onSuccess: "getStatusCompleted",
             onFailure: "getStatusFailed"},
         {kind: "RadioGroup", name: "lockGroup", onclick: "lockGroupClick",
@@ -36,7 +36,7 @@ enyo.kind({
     },
 
     getCurrentStatus: function() {
-        this.$.getLockStatus.call({user: "will", pass: "uber", cmd: "status"});
+        this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
     },
 
     getStatusCompleted: function(inSender, inResponse, inRequest) {
