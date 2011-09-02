@@ -1,0 +1,8 @@
+This locks and unlocks maglocks
+
+It is pretty much guaranteed to not work with any system except the
+one at HeatSync Labs. It queries a custom web interface to 23b's mag
+lock RFID door system. 
+
+The code for that might be online somewhere, but it's ugly and eats
+children. ask zyphon for it if you really want it.
