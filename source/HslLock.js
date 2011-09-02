@@ -3,13 +3,13 @@ enyo.kind({
     kind: "VFlexBox",
     components: [
         {name: "getLockStatus", kind: "WebService",
-            url: "http://hsl-access/~access/cgi-bin/access.rb",
+            url: "http://172.22.110.15/~access/cgi-bin/access.rb",
             onSuccess: "getStatusCompleted",
             onFailure: "getStatusFailed"},
         {kind: "RadioGroup", name: "lockGroup", onclick: "lockGroupClick",
             components: [
-                {caption: "Locked", icon: "images/lock.png", value: "lock"},
-                {caption: "Unlocked", icon: "images/unlocked.png", value: "unlock"}
+                {name: "lockedButton", caption: "Locked", icon: "images/lock.png", value: "lock", style:"font-size:48px"},
+                {name: "unlockedButton", caption: "Unlocked", icon: "images/unlocked.png", value: "unlock", style:"font-size:48px"}
             ]
         }
     ],
@@ -18,20 +18,25 @@ enyo.kind({
         this.inherited(arguments);
 
         this.currentStatus = this.getCurrentStatus();
+
     },
 
     updateColor: function() {
         var color;
         if(this.currentStatus == "l"){
+            this.$.lockedButton.setState("depressed", true);
+            this.$.unlockedButton.setState("depressed", false);
             color = "red";
         } else {
+            this.$.unlockedButton.setState("depressed", true);
+            this.$.lockedButton.setState("depressed", false);
             color = "green";
         }
         this.applyStyle("background" , color);
     },
 
     getCurrentStatus: function() {
-        this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
+        this.$.getLockStatus.call({user: "will", pass: "uber", cmd: "status"});
     },
 
     getStatusCompleted: function(inSender, inResponse, inRequest) {
