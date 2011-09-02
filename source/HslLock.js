@@ -18,7 +18,7 @@ enyo.kind({
         this.inherited(arguments);
 
         this.currentStatus = this.getCurrentStatus();
-
+        this.timerOpen = true;
     },
 
     updateColor: function() {
@@ -60,11 +60,19 @@ enyo.kind({
             }
         }
 
+        this.timerOpen = true;
         this.updateColor();
     },
 
+    getStatusFailed: function(inSender, inError) {
+        this.timerOpen = true;
+    },
+
     lockGroupClick: function(inSender, e) {
-        this.currentStatus = inSender.getValue().substr(0,1);
-        this.$.getLockStatus.call({user: "will", pass: "uber", cmd: inSender.getValue()});
+        if(this.timerOpen) {
+            this.currentStatus = inSender.getValue().substr(0,1);
+            this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: inSender.getValue()});
+            this.timerOpen = false;
+        }
     }
 });
