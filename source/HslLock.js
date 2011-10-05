@@ -17,12 +17,12 @@ enyo.kind({
     create: function() {
         this.inherited(arguments);
 
-        this.currentStatus = this.getCurrentStatus();
+        // this.currentStatus = this.getCurrentStatus();
         this.timerOpen = true;
     },
 
     updateColor: function() {
-        var color;
+        /*var color;
         if(this.currentStatus == "l"){
             this.$.lockedButton.setState("depressed", true);
             this.$.unlockedButton.setState("depressed", false);
@@ -32,11 +32,11 @@ enyo.kind({
             this.$.lockedButton.setState("depressed", false);
             color = "green";
         }
-        this.applyStyle("background" , color);
+        this.applyStyle("background" , color);*/
     },
 
     getCurrentStatus: function() {
-        this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
+        // this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
     },
 
     getStatusCompleted: function(inSender, inResponse, inRequest) {
@@ -62,6 +62,8 @@ enyo.kind({
 
         this.timerOpen = true;
         this.updateColor();
+
+        // setTimeout("hslLock.getCurrentStatus()", 30000);
     },
 
     getStatusFailed: function(inSender, inError) {
