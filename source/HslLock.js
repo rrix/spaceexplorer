@@ -19,6 +19,8 @@ enyo.kind({
 
         this.currentStatus = this.getCurrentStatus();
         this.timerOpen = true;
+
+        setTimeout( "hslLock.getCurrentStatus()", 30000 );
     },
 
     updateColor: function() {
@@ -45,14 +47,13 @@ enyo.kind({
             var lines = results.split("\r");
             for (i = 0; i< lines.length; i++){
                 var line = lines[i];
-                var lockStatus = line.match(/=[ul]/g);
-                var lockStatus2 = line.match(/=[ul]/g);
+                var lockStatus = line.match(/[0-9]$/g);
+                var lockStatus2 = line.match(/[0-9]$/g);
                 if(lockStatus2) {
                     lockStatus = lockStatus2;
                 }
                 if(lockStatus) {
                     lockStatus = lockStatus[0].toString()
-                    lockStatus = lockStatus.substr(1,1);
 
                     this.currentStatus = lockStatus;
                     this.updateColor();
