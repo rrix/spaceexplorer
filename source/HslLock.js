@@ -11,18 +11,26 @@ enyo.kind({
                 {name: "lockedButton", caption: "Locked", icon: "images/lock.png", value: "lock", style:"font-size:48px"},
                 {name: "unlockedButton", caption: "Unlocked", icon: "images/unlocked.png", value: "unlock", style:"font-size:48px"}
             ]
-        }
+        },
+        {kind: "Scrim"}
     ],
 
     create: function() {
         this.inherited(arguments);
 
-        this.currentStatus = this.getCurrentStatus();
-        this.timerOpen = true;
-
-        setTimeout( "hslLock.getCurrentStatus()", 30000 );
+        this.getCurrentStatus();
+        
+        // Blocking timer to prevent people from busting the server jamming on
+        // buttons
+        this.jamLock = true;
+        
+        // This refreshes the screen every 30 seconds
+        setTimeout( "hslLock.getCurrentStatus()", 10000 );
     },
 
+    /*
+     * This function handles updating the UI based on the currentStatus
+     */
     updateColor: function() {
         var color;
         if(this.currentStatus == "1"){
@@ -39,6 +47,7 @@ enyo.kind({
 
     getCurrentStatus: function() {
         this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
+        this.$.scrim.show();
     },
 
     getStatusCompleted: function(inSender, inResponse, inRequest) {
@@ -46,12 +55,11 @@ enyo.kind({
             var results = inResponse;
             var lines = results.split("\r");
             
+            // This will *NEVER* break. Pull out the door lock lines
             line1 = lines[lines.length - 3];
             line2 = lines[lines.length - 2];
             
-            enyo.log(line1)
-            enyo.log(line2)
-            
+            // Turn the last character in to a status
             var lockStatus = line1.match(/[0-9]$/g);
             var lockStatus2 = line2.match(/[0-9]$/g);
             
@@ -66,19 +74,23 @@ enyo.kind({
             }
         }
 
-        this.timerOpen = true;
+        this.jamLock = true;
         this.updateColor();
+        
+        // reset the timer
+        setTimeout( "hslLock.getCurrentStatus()", 30000 );
+        this.$.scrim.hide();
     },
 
     getStatusFailed: function(inSender, inError) {
-        this.timerOpen = true;
+        this.jamLock = true;
     },
 
     lockGroupClick: function(inSender, e) {
-        if(this.timerOpen) {
+        if(this.jamLock) {
             this.currentStatus = inSender.getValue().substr(0,1);
             this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: inSender.getValue()});
-            this.timerOpen = false;
+            this.jamLock = false;
         }
     }
 });
