@@ -47,7 +47,6 @@ enyo.kind({
 
     getCurrentStatus: function() {
         this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: "status"});
-        this.$.scrim.show();
     },
 
     getStatusCompleted: function(inSender, inResponse, inRequest) {
@@ -88,9 +87,15 @@ enyo.kind({
 
     lockGroupClick: function(inSender, e) {
         if(this.jamLock) {
+            this.$.scrim.show();
             this.currentStatus = inSender.getValue().substr(0,1);
             this.$.getLockStatus.call({user: "XXXX", pass: "XXXX", cmd: inSender.getValue()});
             this.jamLock = false;
+            
+            // This is a band-aid, yay band-aids
+            // Basically, there's a delay between when OAC unlocks and when it 
+            // admits it's unlocked. This will help make that less noticeable.
+            setTimeout( "hslLock.getCurrentStatus()", 10000 );
         }
     }
 });
