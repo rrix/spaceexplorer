@@ -1,9 +1,22 @@
 enyo.kind({
-  kind: "onyx.RadioGroup",
-  name: "HslLocks.Buttons",
+  kind:  "onyx.RadioGroup",
+  name:  "HslLocks.Buttons",
+  style: "width: 100%",
+
   components: [
-    {name: "lockedButton",   content: "Locked",   class: "onyx-affirmative", value: "lock",   style:"font-size:48px", onclick: "emitLockedClick"  },
-    {name: "unlockedButton", content: "Unlocked", class: "onyx-negative",    value: "unlock", style:"font-size:48px", onclick: "emitUnlockedClick"}
+    {name:      "lockedButton",
+       content: "Locked",
+       class:   "onyx-affirmative",
+       value:   "lock",
+       style:   "width: 50%; font-size:48px",
+       onclick: "emitLockedClick"  },
+
+    {name:      "unlockedButton",
+       content: "Unlocked",
+       class:   "onyx-negative",
+       value:   "unlock",
+       style:   "width: 50%; font-size:48px",
+       onclick: "emitUnlockedClick"}
   ],
 
   /*
@@ -30,8 +43,8 @@ enyo.kind({
    * Call to set buttongroup to locked
    */
   locked: function() {
-    this.$.lockedButton.active   = true;
-    this.$.unlockedButton.active = false;
+    this.$.lockedButton.tap();
+    this.render();
     this.value = "l";
   },
 
@@ -39,8 +52,8 @@ enyo.kind({
    * Call to set buttongroup to unlocked
    */
   unlocked: function() {
-    this.$.lockedButton.active   = false;
-    this.$.unlockedButton.active = true;
+    this.$.unlockedButton.tap();
+    this.render();
     this.value = "u";
   }
 });
