@@ -33,7 +33,7 @@ enyo.kind({
       this.$.lockGroup.unlocked();
       color = "green";
     }
-    this.applyStyle("background" , color);
+    document.body.style.backgroundColor = color;
   },
 
   getCurrentStatus: function() {
