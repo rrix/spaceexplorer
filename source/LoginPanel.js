@@ -30,6 +30,12 @@ enyo.kind( {
     onLoginChanged: ""
   },
 
+  create: function() {
+    this.inherited(arguments);
+
+    this.$.urlInput.hasNode().value = this.parent.url ? this.parent.url : "http://intranet.heatsynclabs.org/~access/cgi-bin/access.rb";
+  },
+
   saveData: function() {
     enyo.log("clicK");
     values = new Array();

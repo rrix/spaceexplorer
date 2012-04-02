@@ -18,9 +18,6 @@ enyo.kind({
 
     this.loadLoginData();
 
-    this.lockAjaxEndpoint = new enyo.Ajax({ url: this.url});
-    this.lockAjaxEndpoint.handleAs = "text";
-
     this.getCurrentStatus();
 
     // Blocking timer to prevent people from busting the server jamming on
@@ -31,7 +28,9 @@ enyo.kind({
     setTimeout( "hsllock.getCurrentStatus()", 30000);
 
     // In webOS this makes the loading screen go away
-    window.PalmSystem.stageReady() 
+    if( window.PalmSystem ) {
+      window.PalmSystem.stageReady();
+    }
   },
 
   loadLoginData: function() {
@@ -66,6 +65,10 @@ enyo.kind({
   },
 
   getCurrentStatus: function() {
+    // FIXME: Move this to create somehow
+    this.lockAjaxEndpoint = new enyo.Ajax({ url: this.url});
+    this.lockAjaxEndpoint.handleAs = "text";
+
     // FIXME BUG: This is cleared after every successful get
     this.lockAjaxEndpoint.response(this, "getStatusCompleted");
 
