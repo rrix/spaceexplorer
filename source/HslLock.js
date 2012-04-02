@@ -3,13 +3,14 @@ enyo.kind({
   components: [
     {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
     // {kind: "Scrim"}
+    {kind: "HslLocks.PamelaStatus" }
   ],
 
   create: function() {
     this.inherited(arguments);
 
-    this.lockStatusAjax = new enyo.Ajax({ url: "http://172.22.110.15/~access/cgi-bin/access.rb"});
-    this.lockStatusAjax.handleAs = "text";
+    this.lockAjaxEndpoint = new enyo.Ajax({ url: "http://172.22.110.15/~access/cgi-bin/access.rb"});
+    this.lockAjaxEndpoint.handleAs = "text";
 
     this.getCurrentStatus();
 
@@ -38,9 +39,9 @@ enyo.kind({
 
   getCurrentStatus: function() {
     // FIXME BUG: This is cleared after every successful get
-    this.lockStatusAjax.response(this, "getStatusCompleted");
+    this.lockAjaxEndpoint.response(this, "getStatusCompleted");
 
-    this.lockStatusAjax.go({user: "XXXX", pass: "XXXX", cmd: "status"});
+    this.lockAjaxEndpoint.go({user: "XXXX", pass: "XXXX", cmd: "status"});
   },
 
   getStatusCompleted: function(inRequest, inResponse) {
@@ -66,7 +67,7 @@ enyo.kind({
     if(this.jamLock) {
       // this.$.scrim.show();
       this.currentStatus = this.$.lockGroup.value;
-      this.lockStatusAjax.go({user: "XXXX", pass: "XXXX", cmd: this.$.lockGroup.value});
+      this.lockAjaxEndpoint.go({user: "XXXX", pass: "XXXX", cmd: this.$.lockGroup.value});
       this.jamLock = false;
 
       // This is a band-aid, yay band-aids
