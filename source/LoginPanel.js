@@ -16,6 +16,11 @@ enyo.kind( {
         name: "passwordInput",
         placeholder: "Password" },
     ]},
+    { kind: "onyx.InputDecorator", components: [
+      { kind: "onyx.Input",
+        name: "urlInput",
+        placeholder: "Server URL" },
+    ]},
     { kind: "onyx.Button",
       content: "Save",
       onclick: "saveData" }
@@ -30,6 +35,7 @@ enyo.kind( {
     values = new Array();
     values.push(this.$.userInput.hasNode().value);
     values.push(this.$.passwordInput.hasNode().value);
+    values.push(this.$.urlInput.hasNode().value);
 
     localStorage.setItem("hsllock_loginData", values.join("|") );
     this.hide();

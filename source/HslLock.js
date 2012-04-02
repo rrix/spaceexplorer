@@ -16,10 +16,12 @@ enyo.kind({
   create: function() {
     this.inherited(arguments);
 
-    this.lockAjaxEndpoint = new enyo.Ajax({ url: "http://172.22.110.15/~access/cgi-bin/access.rb"});
+    this.loadLoginData();
+
+    this.lockAjaxEndpoint = new enyo.Ajax({ url: this.url});
     this.lockAjaxEndpoint.handleAs = "text";
 
-    this.loadLoginData();
+    this.getCurrentStatus();
 
     // Blocking timer to prevent people from busting the server jamming on
     // buttons
@@ -27,6 +29,9 @@ enyo.kind({
 
     // This refreshes the screen every 30 seconds
     setTimeout( "hsllock.getCurrentStatus()", 30000);
+
+    // In webOS this makes the loading screen go away
+    window.PalmSystem.stageReady() 
   },
 
   loadLoginData: function() {
@@ -37,6 +42,7 @@ enyo.kind({
       loginData = loginData.split("|");
       this.username = loginData[0];
       this.password = loginData[1];
+      this.url      = loginData[2];
     } else {
       this.$.loginPopup.show();
     }
