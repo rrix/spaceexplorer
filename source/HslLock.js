@@ -41,7 +41,7 @@ enyo.kind({
       loginData = loginData.split("|");
       this.username = loginData[0];
       this.password = loginData[1];
-      this.url      = loginData[2];
+      this.url      = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/access.rb";
     } else {
       this.$.loginPopup.show();
     }
