@@ -6,7 +6,7 @@ enyo.kind( {
   components: [
     { tag: "h1",
       content: "Who's in the Space?" },
-    { tag: "ul",
+    { tag: "div",
       name: "peopleUl" }
   ],
 
@@ -32,15 +32,16 @@ enyo.kind( {
     this.$.peopleUl.destroyComponents();
 
     if( !data ) {
-      this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "li", content: "No one... :("} );
+      this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "p", content: "No one... :("} );
     } else {
       for( var i = 0; i < data.length; i++) {
         if( !/^\./.exec(data[i]) ) {
-          this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "li", content: data[i]} );
+          this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "p", content: data[i]} );
         }
       }
     }
 
+    this.fit = true;
     this.render();
     setTimeout( enyo.bind(this, this.updateFromPamela), 30000 );
   }

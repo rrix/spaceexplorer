@@ -1,14 +1,16 @@
 enyo.kind({
   name: "HslLocks.Main",
   components: [
-    {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
     {kind: "onyx.Popup", name: "scrim", autoDismiss: false, modal: true, centered: true,
      components: [
       {tag: "h1", content: "Please Wait"}
     ]},
-    {kind: "HslLocks.PamelaStatus" },
     {kind: "HslLocks.LoginPopup", name: "loginPopup", onLoginChanged: "loadLoginData"},
-    {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
+    {kind: "FittableRows", components: [
+      {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
+      {kind: "HslLocks.PamelaStatus" },
+      {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
+    ]}
   ],
 
   create: function() {
