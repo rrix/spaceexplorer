@@ -2,7 +2,10 @@ enyo.kind({
   name: "HslLocks.Main",
   components: [
     {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
-    // {kind: "Scrim"}
+    {kind: "onyx.Popup", name: "scrim", autoDismiss: false, modal: true, centered: true,
+     components: [
+      {tag: "h1", content: "Please Wait"}
+    ]},
     {kind: "HslLocks.PamelaStatus" },
     {kind: "HslLocks.LoginPopup", name: "loginPopup", onLoginChanged: "loadLoginData"},
     {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
@@ -77,12 +80,12 @@ enyo.kind({
 
     // reset the timer
     setTimeout("hsllock.getCurrentStatus()", 30000);
-    // this.$.scrim.hide();
+    this.$.scrim.hide();
   },
 
   lockGroupClick: function(inSender, e) {
     if(this.jamLock) {
-      // this.$.scrim.show();
+      this.$.scrim.show();
       this.currentStatus = this.$.lockGroup.value;
       this.lockAjaxEndpoint.go({user: this.username, pass: this.password, cmd: this.$.lockGroup.value});
       this.jamLock = false;
