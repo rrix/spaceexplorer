@@ -21,6 +21,10 @@ enyo.kind( {
       onclick: "saveData" }
   ],
 
+  events: {
+    onLoginChanged: ""
+  },
+
   saveData: function() {
     enyo.log("clicK");
     values = new Array();
@@ -29,5 +33,6 @@ enyo.kind( {
 
     localStorage.setItem("hsllock_loginData", values.join("|") );
     this.hide();
+    this.doLoginChanged();
   }
 });
