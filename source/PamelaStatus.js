@@ -31,13 +31,17 @@ enyo.kind( {
   rebuild: function( data ) {
     this.$.peopleUl.destroyComponents();
 
-    for( var i = 0; i < data.length; i++) {
-      if( !/^\./.exec(data[i]) ) {
-        this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "li", content: data[i]} );
+    if( !data ) {
+      this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "li", content: "No one... :("} );
+    } else {
+      for( var i = 0; i < data.length; i++) {
+        if( !/^\./.exec(data[i]) ) {
+          this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "li", content: data[i]} );
+        }
       }
     }
 
     this.render();
-    setTimeout( enyo.bind(this, this.updateFromPamela()), 30000 );
+    setTimeout( enyo.bind(this, this.updateFromPamela), 30000 );
   }
 });

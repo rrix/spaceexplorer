@@ -3,7 +3,9 @@ enyo.kind({
   components: [
     {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
     // {kind: "Scrim"}
-    {kind: "HslLocks.PamelaStatus" }
+    {kind: "HslLocks.PamelaStatus" },
+    {kind: "HslLocks.LoginPopup", name: "loginPopup"},
+    {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
   ],
 
   create: function() {
@@ -75,5 +77,9 @@ enyo.kind({
       // admits it's unlocked. This will help make that less noticeable.
       setTimeout("hsllock.getCurrentStatus()", 10000);
     }
+  },
+
+  showPopup: function() {
+    this.$.loginPopup.show();
   }
 });
