@@ -1,6 +1,6 @@
 enyo.depends(
-	"$lib/layout",
-	"$lib/onyx",
+  "$lib/layout",
+  "$lib/onyx",
   "HslLock.js",
   "Buttons.js",
   "PamelaStatus.js",

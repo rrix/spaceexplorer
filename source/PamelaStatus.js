@@ -1,18 +1,23 @@
 enyo.kind( {
   kind: "enyo.Control",
   name: "HslLocks.PamelaStatus",
+  fit:true,
   style: "text-align: center",
   published: {
     url: "http://172.22.110.17/data.php"
-  }
+  },
 
   components: [
-    { kind: "enyo.Scroller",
+    {
+      kind:  "Scroller",
+      name:  "scroller",
+      fit:   true,
+      touch: true,
+      thumb: true,
       components: [
         { tag: "h1",
           content: "Who's in the Space?" },
-        { tag: "div",
-          name: "peopleUl" }
+        { fti:true, name: "peopleList" }
       ]
     }
   ],
@@ -24,6 +29,7 @@ enyo.kind( {
 
     this.pamelaAjax = new enyo.Ajax( { url: this.url } );
     this.updateFromPamela();
+    setInterval( enyo.bind(this, this.updateFromPamela), 30000 );
   },
 
   updateFromPamela: function() {
@@ -36,20 +42,19 @@ enyo.kind( {
   },
 
   rebuild: function( data ) {
-    this.$.peopleUl.destroyComponents();
+    this.$.peopleList.destroyComponents();
 
     if( !data ) {
-      this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "p", content: "No one... :("} );
+      this.pamelaItems[i] = this.$.peopleList.createComponent({content: "No one... :("} );
     } else {
       for( var i = 0; i < data.length; i++) {
         if( !/^\./.exec(data[i]) ) {
-          this.pamelaItems[i] = this.$.peopleUl.createComponent({tag: "p", content: data[i]} );
+          this.pamelaItems[i] = this.$.peopleList.createComponent({content: data[i]} );
         }
       }
     }
 
     this.fit = true;
     this.render();
-    setTimeout( enyo.bind(this, this.updateFromPamela), 30000 );
   }
 });
