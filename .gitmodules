@@ -7,3 +7,6 @@
 [submodule "layout"]
 	path = layout
 	url = https://github.com/enyojs/layout.git
+[submodule "enyo-support"]
+	path = enyo-support
+	url = https://github.com/enyojs/support.git

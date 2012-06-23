@@ -25,7 +25,7 @@ enyo.kind({
     this.jamLock = true;
 
     // This refreshes the screen every 30 seconds
-    setTimeout( "hsllock.getCurrentStatus()", 30000);
+    setInterval( "hsllock.getCurrentStatus()", 30000);
 
     // In webOS this makes the loading screen go away
     if( window.PalmSystem ) {
@@ -89,8 +89,6 @@ enyo.kind({
     this.jamLock = true;
     this.updateColor();
 
-    // reset the timer
-    setTimeout("hsllock.getCurrentStatus()", 30000);
     this.$.scrim.hide();
   },
 
