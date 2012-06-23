@@ -2,12 +2,19 @@ enyo.kind( {
   kind: "enyo.Control",
   name: "HslLocks.PamelaStatus",
   style: "text-align: center",
+  published: {
+    url: "http://172.22.110.17/data.php"
+  }
 
   components: [
-    { tag: "h1",
-      content: "Who's in the Space?" },
-    { tag: "div",
-      name: "peopleUl" }
+    { kind: "enyo.Scroller",
+      components: [
+        { tag: "h1",
+          content: "Who's in the Space?" },
+        { tag: "div",
+          name: "peopleUl" }
+      ]
+    }
   ],
 
   create: function() {
@@ -15,7 +22,7 @@ enyo.kind( {
 
     this.pamelaItems = [];
 
-    this.pamelaAjax = new enyo.Ajax( { url: "http://172.22.110.17/data.php" } );
+    this.pamelaAjax = new enyo.Ajax( { url: this.url } );
     this.updateFromPamela();
   },
 
