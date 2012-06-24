@@ -2,6 +2,7 @@ enyo.depends(
   "$lib/layout",
   "$lib/onyx",
   "HslLock.js",
+  "Buttons.css",
   "Buttons.js",
   "PamelaStatus.js",
   "LoginPanel.js",

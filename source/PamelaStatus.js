@@ -10,14 +10,16 @@ enyo.kind( {
   components: [
     {
       kind:  "Scroller",
-      name:  "scroller",
+      name:  "pamelaScroller",
       fit:   true,
       touch: true,
       thumb: true,
       components: [
-        { tag: "h1",
-          content: "Who's in the Space?" },
-        { fti:true, name: "peopleList" }
+        {
+          tag: "h1",
+          content: "Who's in the Space?"
+        },
+        { fit:true, name: "peopleList" }
       ]
     }
   ],
@@ -54,7 +56,6 @@ enyo.kind( {
       }
     }
 
-    this.fit = true;
     this.render();
   }
 });

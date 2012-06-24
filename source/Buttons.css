@@ -1,0 +1,18 @@
+.hsltogglebuttons {
+  width: 50%;
+  font-size:48px;
+}
+
+.single-center-button {
+  display: block;
+  margin: 0px auto;
+}
+
+.hidden-button {
+  display: none
+}
+
+.buttonWrap {
+  width: 100%;
+  height:125px;
+}

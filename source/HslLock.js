@@ -1,12 +1,13 @@
 enyo.kind({
   name: "HslLocks.Main",
+  classes: "enyo-fit",
   components: [
     {
       kind: "FittableRows",
-      classes: "enyo-fit",
+      fit: true,
       components: [
-        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
-        {kind: "HslLocks.PamelaStatus", fit:true },
+        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup", fit:true},
+        {kind: "HslLocks.PamelaStatus"},
         {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
       ]
     },
@@ -97,17 +98,33 @@ enyo.kind({
   },
 
   lockGroupClick: function(inSender, e) {
-    if(this.jamLock) {
-      this.$.scrim.show();
-      this.currentStatus = this.$.lockGroup.value;
-      this.lockAjaxEndpoint.go({user: this.username, pass: this.password, cmd: this.$.lockGroup.value});
-      this.jamLock = false;
-
-      // This is a band-aid, yay band-aids
-      // Basically, there's a delay between when OAC unlocks and when it 
-      // admits it's unlocked. This will help make that less noticeable.
-      setTimeout("hsllock.getCurrentStatus()", 10000);
+    if( this.$.lockGroup.value == "toggle" )
+    {
+      this.$.lockGroup.value = "u";
+      this.sendToLock();
+      enyo.job(
+        "toggleOff",
+        enyo.bind( this, function() {
+          this.$.lockGroup.value = "l";
+          this.sendToLock();
+        }),
+        30000 );
+    } else if(this.jamLock) {
+      this.sendToLock();
     }
+  },
+
+  // FIXME: needs a better name.
+  sendToLock: function() {
+    this.$.scrim.show();
+    this.currentStatus = this.$.lockGroup.value;
+    this.lockAjaxEndpoint.go({user: this.username, pass: this.password, cmd: this.$.lockGroup.value});
+    this.jamLock = false;
+
+    // This is a band-aid, yay band-aids
+    // Basically, there's a delay between when OAC unlocks and when it 
+    // admits it's unlocked. This will help make that less noticeable.
+    setTimeout("hsllock.getCurrentStatus()", 10000);
   },
 
   showPopup: function() {

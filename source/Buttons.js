@@ -1,22 +1,37 @@
 enyo.kind({
-  kind:  "onyx.RadioGroup",
+  kind: "enyo.Control",
   name:  "HslLocks.Buttons",
-  style: "width: 100%",
+  classes: "buttonWrap",
+  layoutKind: "FittableRowsLayout",
 
   components: [
-    {name:      "lockedButton",
-       content: "Locked",
-       class:   "onyx-affirmative",
-       value:   "lock",
-       style:   "width: 50%; font-size:48px",
-       onclick: "emitLockedClick"  },
-
-    {name:      "unlockedButton",
-       content: "Unlocked",
-       class:   "onyx-negative",
-       value:   "unlock",
-       style:   "width: 50%; font-size:48px",
-       onclick: "emitUnlockedClick"}
+    {
+      kind:  "onyx.RadioGroup",
+      components: [
+        {
+          name:     "lockedButton",
+          content:  "Locked",
+          classes:  "onyx-affirmative hsltogglebuttons",
+          value:    "lock",
+          onclick:  "emitLockedClick"
+        },
+        {
+          name:     "unlockedButton",
+          content:  "Unlocked",
+          classes:  "onyx-negative hsltogglebuttons",
+          value:    "unlock",
+          onclick:  "emitUnlockedClick"
+        }
+      ]
+    },
+    {
+      kind: "onyx.Button",
+      name: "quickToggle",
+      content: "Open for 30 seconds",
+      classes: "hsltogglebuttons single-center-button",
+      value: "toggle",
+      onclick: "emitToggleClick"
+    }
   ],
 
   /*
@@ -35,6 +50,14 @@ enyo.kind({
     this.emitClick();
   },
 
+  /*
+   * Toggle button clicked
+   */
+  emitToggleClick: function() {
+    this.value = "toggle";
+    this.emitClick();
+  },
+
   emitClick: function() {
     this.bubble("click");
   },
@@ -44,6 +67,7 @@ enyo.kind({
    */
   locked: function() {
     this.$.lockedButton.tap();
+    this.$.quickToggle.removeClass( "hidden-button" );
     this.render();
     this.value = "l";
   },
@@ -53,6 +77,7 @@ enyo.kind({
    */
   unlocked: function() {
     this.$.unlockedButton.tap();
+    this.$.quickToggle.addClass( "hidden-button" );
     this.render();
     this.value = "u";
   }
