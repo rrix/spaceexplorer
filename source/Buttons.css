@@ -4,6 +4,7 @@
 }
 
 .single-center-button {
+  width: inherit;
   display: block;
   margin: 0px auto;
 }
