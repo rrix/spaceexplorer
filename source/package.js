@@ -3,5 +3,6 @@ enyo.depends(
   "$lib/onyx",
   "Main.css",
   "Main.js",
-  "Spaces.js"
+  "Spaces.js",
+  "Scroller.js"
 );
