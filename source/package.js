@@ -3,6 +3,7 @@ enyo.depends(
   "$lib/onyx",
   "$lib/canvas-spinner",
   "$lib/more-arrangers",
+  "$lib/maps",
   "Main.css",
   "Main.js",
   "SpaceInfo.js",
