@@ -10,13 +10,18 @@
     <!-- css -->
     <link href="build/enyo.css" rel="stylesheet">
     <link href="build/app.css" rel="stylesheet">
+    <!-- Cordova -->
+    <script src="phonegap.js"></script>
     <!-- js -->
     <script src="build/enyo.js"></script>
     <script src="build/app.js" onerror="alert('No application build found, redirecting to debug.html.'), location='debug.html';"></script>
   </head>
   <body class="enyo-unselectable">
     <script>
-      new SpaceAPI.Main().write();
+      // tell Enyo to listen for deviceready event
+      enyo.dispatcher.listen(document, "deviceready");
+
+      new SpaceAPI.Main().renderInto(document.body);
     </script>
   </body>
 </html>
