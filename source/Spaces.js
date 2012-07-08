@@ -4,7 +4,7 @@ enyo.kind({
 
   published: {
     directory: "http://openspace.slopjong.de/directory.json",
-    directoryData: {},
+    directoryData: [],
     state:    "idle",
     spaceStatuses: {},
     spaceCount: 0
@@ -30,7 +30,11 @@ enyo.kind({
 
   directoryFetched: function( inSender, inResponse ) {
     this.state = "directoryFetched";
-    this.directoryData = inResponse;
+    this.directoryData = [];
+
+    for( var idx in inResponse ) {
+      this.directoryData.push(inResponse[idx]);
+    }
 
     this.doDirectoryFetched( inResponse );
     this.fetchSpaces( inResponse );
@@ -41,23 +45,19 @@ enyo.kind({
     doFetchError();
   },
 
+  // FIXME: http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
+  size: function() {
+    return this.directoryData.length;
+  },
+
   fetchSpaces: function( directoryJson ) {
-    delete directoryJson['originator'];
+    delete directoryJson.originator;
 
-    // FIXME: http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
-    var size = function(obj) {
-      var size = 0, key;
-      for (key in obj) {
-        if (obj.hasOwnProperty(key)) size++;
-      }
-      return size;
-    };
-
-    this.spaceCount = size(directoryJson);
+    this.spaceCount = this.size();
 
     this.state = "spacesFetch";
 
-    for( space in directoryJson ) {
+    for( var space in directoryJson ) {
       // Filter originator being added to emitted events
       var url = directoryJson[space];
       if( typeof( url ) == "string" ) {
@@ -78,8 +78,7 @@ enyo.kind({
       var spaceFetch = new enyo.Ajax( { url: spaceURL } );
       this.state = "spaceFetch";
 
-      spaceFetch.response( this, "spaceFetched"      );
-      spaceFetch.error(    this, "spaceFetchFailure" );
+      spaceFetch.response( this, "spaceFetched" );
       spaceFetch.go();
     }
   },
@@ -90,23 +89,21 @@ enyo.kind({
     if( typeof(inResponse) == "object" ) {
       this.spaceStatuses[inSender.url] = inResponse;
       this.doSpaceFetched({url: inSender.url, response: inResponse});
+
+      this.fetchedSpaceCount++;
     } else {
-      fail = true;
+      enyo.log( "Failed to fetch " + inSender.url);
+
+      var idx = this.directoryData.indexOf(inSender.url);
+      this.directoryData.splice(idx, 1);
+      this.spaceCount = this.size();
+
+      this.doFetchError(inSender, inSender.url);
     }
 
-    this.fetchedSpaceCount++;
     if( this.fetchedSpaceCount == this.spaceCount ) {
       this.state = "spacesFetched";
       this.doSpacesFetched();
     }
-
-    if(fail) {
-      inSender.fail(inResponse);
-    }
-  },
-
-  spaceFetchFailure: function(inSender, inResponse) {
-    this.spaceStatuses[inSender.url] = {error: "Fetch returned undefined"};
-    this.doFetchError(inSender, inSender.url);
   }
 });
