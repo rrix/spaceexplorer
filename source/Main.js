@@ -5,6 +5,9 @@ enyo.kind({
 
   components:[
     {
+      kind: "Signals"
+    },
+    {
       kind: "SpaceAPI.Spaces",
       name: "spaces",
       onSpacesFetched: "spacesFetched"
