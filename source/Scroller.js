@@ -33,8 +33,8 @@ enyo.kind({
     this.reset();
   },
 
-  itemTapped: function( inSender ) {
-    this.doSpaceSelected(inSender);
+  itemTapped: function( inSender, inEvent ) {
+    this.doSpaceSelected(inEvent);
   }
 
 });

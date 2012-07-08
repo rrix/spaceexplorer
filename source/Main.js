@@ -24,7 +24,8 @@ enyo.kind({
           kind: "SpaceAPI.Scroller",
           name: "dataScroller",
           onSetupItem: "setupScrollerItem",
-          onSpaceSelected: "spaceSelected"
+          onSpaceSelected: "spaceSelected",
+          style: 'height: 100%'
         },
         {
           kind: "SpaceAPI.SpaceInfo",
@@ -87,11 +88,12 @@ enyo.kind({
     inSender.$.item.space = space;
   },
 
-  spaceSelected: function(inSender, inItem) {
-    var space = inItem.space;
+  spaceSelected: function(inSender, inEvent) {
+    var url = this.$.spaces.directoryData[inEvent.index];
+    var space = this.$.spaces.spaceStatuses[url];
 
     this.$.spaceInfo.space = space;
-    this.$.spaceInfo.render();
+    this.$.spaceInfo.update();
     this.$.panel.next();
   }
 });
