@@ -15,11 +15,37 @@ enyo.kind({
       style: 'height: 7%'
     },
     {
-      kind: "SpaceAPI.Scroller",
-      name: "dataScroller",
+      kind: "Panels",
+      name: "panel",
       style: 'height: 93%',
-      touch: true,
-      onSetupItem: "setupScrollerItem"
+      arrangerKind: "PageSpinArranger",
+      components: [
+        {
+          kind: "SpaceAPI.Scroller",
+          name: "dataScroller",
+          onSetupItem: "setupScrollerItem",
+          onSpaceSelected: "spaceSelected"
+        },
+        {
+          kind: "SpaceAPI.SpaceInfo",
+          name: "spaceInfo"
+        }
+      ]
+    },
+    {
+      name: "loadingScrim",
+      style: "background: black; opacity: 0.5",
+      classes: "enyo-fit",
+      components: [
+        {
+          name: "loadingSpinner",
+          kind: 'jmtk.Spinner',
+          color: "#ffffff",
+          diameter: 190,
+          shape: "spiral",
+          style: "margin: auto auto"
+        }
+      ]
     }
   ],
 
@@ -32,6 +58,8 @@ enyo.kind({
   spacesFetched: function( inSender ) {
     enyo.log(this.$.spaces.spaceStatuses);
 
+    this.$.loadingScrim.addStyles("display: none");
+
     this.$.dataScroller.setCount( inSender.spaceCount);
     this.$.dataScroller.reset();
   },
@@ -42,20 +70,28 @@ enyo.kind({
 
     try {
       if( space.open ) {
+        inSender.$.item.addClass( "openSpace" );
+        inSender.$.item.removeClass( "closedSpace" );
         inSender.$.icon.setSrc( space.icon.open );
       } else {
+        inSender.$.item.addClass("closedSpace");
+        inSender.$.item.removeClass( "openSpace" );
         inSender.$.icon.setSrc( space.icon.closed );
       }
-
     } catch(e) {
       inSender.$.icon.setSrc( space.logo );
     }
 
-    try {
-      inSender.$.spaceName.setContent( space.space );
-    } catch(e) {
-      inSender.$.spaceName.setContent( "Somewhere Over t3h Rainbow" );
-    }
+    inSender.$.spaceName.setContent( space.space );
 
+    inSender.$.item.space = space;
+  },
+
+  spaceSelected: function(inSender, inItem) {
+    var space = inItem.space;
+
+    this.$.spaceInfo.space = space;
+    this.$.spaceInfo.render();
+    this.$.panel.next();
   }
 });

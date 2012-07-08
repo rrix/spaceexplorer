@@ -1,7 +1,6 @@
 enyo.kind({
   kind: "List",
   name: "SpaceAPI.Scroller",
-  touch: true,
 
   events: {
     onSpaceSelected: ""
@@ -9,6 +8,7 @@ enyo.kind({
 
   components: [
     {
+      name: "item",
       classes: "item",
       ontap:   "itemTapped",
       layoutKind: "FittableColumnsLayout",
@@ -20,6 +20,7 @@ enyo.kind({
         },
         {
           name: "spaceName",
+          fit:  true,
           classes: "spaceName"
         }
       ]
@@ -33,7 +34,7 @@ enyo.kind({
   },
 
   itemTapped: function( inSender ) {
-    enyo.log( inSender);
+    this.doSpaceSelected(inSender);
   }
 
 });

@@ -1,8 +1,11 @@
 enyo.depends(
   "$lib/layout",
   "$lib/onyx",
+  "$lib/canvas-spinner",
+  "$lib/more-arrangers",
   "Main.css",
   "Main.js",
+  "SpaceInfo.js",
   "Spaces.js",
   "Scroller.js"
 );
