@@ -16,7 +16,7 @@ enyo.kind({
         {
           kind: "enyo.Image",
           name: "icon",
-          style: "height: 100px; width: 100px"
+          style: "height: 100%"
         },
         {
           name: "spaceName",
