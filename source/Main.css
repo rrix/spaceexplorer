@@ -3,16 +3,21 @@
   This way, you can minify your application, and just remove the "source" folder for production
 */
 #app {
-  margin: 16px;
-  border-radius: 4px;
   background-color: silver;
+  border-radius: 4px;
+  margin: 16px;
   padding: 16px;
 }
 
+.item {
+  height: 75px;
+}
+
 .spaceName {
-  font-size: 1.6em;
-  line-height: 96px;
   color: white;
+  font-size: 1.6em;
+  line-height: 75px;
+  margin-left: 10px;
 }
 
 .openSpace {
@@ -38,6 +43,6 @@
 }
 
 canvas {
-  margin: 7% auto;
+  margin: 10% auto;
   display: block;
 }
