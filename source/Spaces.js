@@ -5,16 +5,16 @@ enyo.kind({
   published: {
     directory: "http://openspace.slopjong.de/directory.json",
     directoryData: [],
-    state:    "idle",
+    spaceCount: 0,
     spaceStatuses: {},
-    spaceCount: 0
+    state:    "idle"
   },
 
   events: {
     onDirectoryFetched: "",
+    onFetchError: "",
     onSpaceFetched: "",
-    onSpacesFetched: "",
-    onFetchError: ""
+    onSpacesFetched: ""
   },
 
   fetchedSpaceCount: 0,
@@ -45,7 +45,6 @@ enyo.kind({
     doFetchError();
   },
 
-  // FIXME: http://stackoverflow.com/questions/5223/length-of-javascript-object-ie-associative-array
   size: function() {
     return this.directoryData.length;
   },
@@ -78,7 +77,8 @@ enyo.kind({
       var spaceFetch = new enyo.Ajax( { url: spaceURL } );
       this.state = "spaceFetch";
 
-      spaceFetch.response( this, "spaceFetched" );
+      spaceFetch.response(  this, "spaceFetched" );
+      spaceFetch.error( this, "spaceFetchFailed" );
       spaceFetch.go();
     }
   },
@@ -91,15 +91,26 @@ enyo.kind({
       this.doSpaceFetched({url: inSender.url, response: inResponse});
 
       this.fetchedSpaceCount++;
+      enyo.log( "Fetched " + inSender.url);
+      enyo.log( this.size() );
     } else {
-      enyo.log( "Failed to fetch " + inSender.url);
-
-      var idx = this.directoryData.indexOf(inSender.url);
-      this.directoryData.splice(idx, 1);
-      this.spaceCount = this.size();
-
-      this.doFetchError(inSender, inSender.url);
+      this.spaceFetchFailed(inSender);
     }
+
+    if( this.fetchedSpaceCount == this.spaceCount ) {
+      this.state = "spacesFetched";
+      this.doSpacesFetched();
+    }
+  },
+
+  spaceFetchFailed: function(inSender) {
+    enyo.log( "Failed to fetch " + inSender.url);
+
+    var idx = this.directoryData.indexOf(inSender.url);
+    this.directoryData.splice(idx, 1);
+    this.spaceCount = this.size();
+
+    this.doFetchError(inSender, inSender.url);
 
     if( this.fetchedSpaceCount == this.spaceCount ) {
       this.state = "spacesFetched";
