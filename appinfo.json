@@ -1,0 +1,14 @@
+{
+  "id":                 "si.rix.spaceexplorer",
+  "title":              "SpaceExplorer",
+  "vendor":             "ry@n.rix.si",
+  "vendorurl":          "http://build.phonegap.com/apps/155496",
+  "version":            "0.0.1",
+  "type":               "web",
+  "theme":              "dark",
+  "noDeprecatedStyles": "true",
+  "main":               "index.html",
+  "miniicon":           "mini-icon.png",
+  "icon":               "icon.png",
+  "uiRevision":         "2"
+}
