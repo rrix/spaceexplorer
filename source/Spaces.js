@@ -91,9 +91,9 @@ enyo.kind({
       this.doSpaceFetched({url: inSender.url, response: inResponse});
 
       this.fetchedSpaceCount++;
-      enyo.log( "Fetched " + inSender.url);
-      enyo.log( this.size() );
+      //enyo.log( "Fetched " + inSender.url);
     } else {
+      //enyo.log( "Bad error" );
       this.spaceFetchFailed(inSender);
     }
 
@@ -116,5 +116,25 @@ enyo.kind({
       this.state = "spacesFetched";
       this.doSpacesFetched();
     }
+  },
+
+  sort: function( cb ) {
+    this.directoryData.sort( enyo.bind(this, function(a,b) {
+      var spaceA = this.spaceStatuses[a];
+      var spaceB = this.spaceStatuses[b];
+
+      if( !(spaceA.lon && spaceA.lon) ) {
+        enyo.log(spaceA.space + " doesn't have geodata :(" );
+        return 1;
+      }
+      if( !(spaceB.lon && spaceB.lon) ) {
+        enyo.log(spaceB.space + " doesn't have geodata :(" );
+        return -1;
+      }
+
+      var sortOrder = cb(spaceA,spaceB);
+      return sortOrder;
+    }));
+    //enyo.log( this.directoryData );
   }
 });

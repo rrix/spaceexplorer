@@ -61,7 +61,6 @@ enyo.kind({
 
   update: function() {
     var space = this.space;
-    enyo.log( space );
     if( space ) {
       this.$.bmap.setLatitude( space.lat );
       this.$.bmap.setLongitude( space.lon );
