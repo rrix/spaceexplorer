@@ -6,9 +6,20 @@ enyo.kind({
     {
       kind: "FittableRows",
       components: [
-        {kind: "enyo.Signals", onmenubutton: "showPopup"},
-        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
-        {kind: "HslLocks.PamelaStatus", fit:true}
+        {
+          kind: "HslLocks.Buttons",
+          onclick: "lockGroupClick",
+          name: "lockGroup"
+        },
+        {
+          kind: "HslLocks.PamelaStatus",
+          fit:true
+        },
+        {
+          kind: "onyx.Button",
+          content: "Log in",
+          onclick: "showPopup"
+        }
       ]
     },
     {
@@ -117,6 +128,13 @@ enyo.kind({
     } else if(this.jamLock) {
       this.sendToLock();
     }
+
+    this.recalc();
+  },
+
+  recalc: function() {
+    this.reflow();
+    this.render();
   },
 
   // FIXME: needs a better name.
