@@ -15,5 +15,9 @@
 
 .buttonWrap {
   width: 100%;
-  height:125px;
+  display: block;
+}
+
+.loginPopup {
+  width: 70%
 }
