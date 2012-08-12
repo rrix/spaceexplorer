@@ -1,8 +1,8 @@
 enyo.kind( {
   kind:  "enyo.Control",
   name:  "HslLocks.PamelaStatus",
-  fit:   true,
-  style: "text-align: center",
+  classes: 'enyo-fit',
+  style: "text-align: center; margin-top: 140px; margin-bottom: 35px;",
 
   published: {
     url: "http://heatsynclabs.org:1337/data.php"
@@ -10,18 +10,13 @@ enyo.kind( {
 
   components: [
     {
-      tag: "h1",
-      content: "Who's in the Space?"
-    },
-    {
       kind:  "Scroller",
       name:  "pamelaScroller",
-      style: "height: 100%",
+      classes: 'enyo-fit',
       touch: true,
       thumb: true,
       components: [
         {
-          fit:  true,
           name: "peopleList"
         }
       ]

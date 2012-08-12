@@ -5,6 +5,7 @@ enyo.kind({
   components: [
     {
       kind: "FittableRows",
+      classes: "enyo-fit",
       components: [
         {
           kind: "HslLocks.Buttons",
@@ -12,14 +13,20 @@ enyo.kind({
           name: "lockGroup"
         },
         {
-          kind: "HslLocks.PamelaStatus",
-          fit:true
+          tag: "h1",
+          content: "Who's in the Space?",
+          style: 'text-align: center;'
         },
         {
+          kind: "HslLocks.PamelaStatus",
+        },
+        {
+          name: 'loginButton',
           kind: "onyx.Button",
           content: "Log in",
-          onclick: "showPopup"
+          onclick: "showPopup",
         }
+
       ]
     },
     {
@@ -145,7 +152,7 @@ enyo.kind({
     this.jamLock = false;
 
     // This is a band-aid, yay band-aids
-    // Basically, there's a delay between when OAC unlocks and when it 
+    // Basically, there's a delay between when OAC unlocks and when it
     // admits it's unlocked. This will help make that less noticeable.
     setTimeout(enyo.bind(this,this.getCurrentStatus), 10000);
   },

@@ -21,17 +21,17 @@ enyo.kind({
           classes:  "onyx-negative hsltogglebuttons",
           value:    "unlock",
           onclick:  "emitUnlockedClick"
+        },
+        {
+          name: "quickToggle",
+          content: "Open for 30 seconds",
+          classes: "hsltogglebuttons",
+          value: "toggle",
+          onclick: "emitToggleClick"
         }
       ]
-    },
-    {
-      kind: "onyx.Button",
-      name: "quickToggle",
-      content: "Open for 30 seconds",
-      classes: "hsltogglebuttons single-center-button",
-      value: "toggle",
-      onclick: "emitToggleClick"
     }
+
   ],
 
   /*
@@ -67,7 +67,7 @@ enyo.kind({
    */
   locked: function() {
     this.$.lockedButton.tap();
-    this.$.quickToggle.removeClass( "hidden-button" );
+    this.$.quickToggle.setDisabled(false);
     this.render();
     this.value = "l";
   },
@@ -77,7 +77,7 @@ enyo.kind({
    */
   unlocked: function() {
     this.$.unlockedButton.tap();
-    this.$.quickToggle.addClass( "hidden-button" );
+    this.$.quickToggle.setDisabled(true);
     this.render();
     this.value = "u";
   }
