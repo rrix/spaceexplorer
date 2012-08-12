@@ -10,16 +10,16 @@ enyo.kind( {
 
   components: [
     {
+      tag: "h1",
+      content: "Who's in the Space?"
+    },
+    {
       kind:  "Scroller",
       name:  "pamelaScroller",
-      fit:   true,
+      style: "height: 100%",
       touch: true,
       thumb: true,
       components: [
-        {
-          tag: "h1",
-          content: "Who's in the Space?"
-        },
         {
           fit:  true,
           name: "peopleList"
@@ -39,12 +39,12 @@ enyo.kind( {
   },
 
   updateFromPamela: function() {
-    this.pamelaAjax.response( enyo.bind(this, this.updateResponse) );
+    this.pamelaAjax.response( enyo.bind(this,
+      function(inRequest, inResponse) {
+        this.rebuild(inResponse);
+      }
+    ));
     this.pamelaAjax.go();
-  },
-
-  updateResponse: function(inRequest, inResponse) {
-    this.rebuild(inResponse);
   },
 
   rebuild: function( data ) {
@@ -55,7 +55,7 @@ enyo.kind( {
     } else {
       for( var i = 0; i < data.length; i++) {
         if( !/^\./.exec(data[i]) ) {
-          this.pamelaItems[i] = this.$.peopleList.createComponent({content: data[i]} );
+          this.pamelaItems.push( this.$.peopleList.createComponent({content: data[i]} ) );
         }
       }
     }
