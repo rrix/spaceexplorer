@@ -5,10 +5,28 @@ enyo.kind({
   components: [
     {
       kind: "FittableRows",
+      classes: "enyo-fit",
       components: [
-        {kind: "enyo.Signals", onmenubutton: "showPopup"},
-        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
-        {kind: "HslLocks.PamelaStatus", fit:true}
+        {
+          kind: "HslLocks.Buttons",
+          onclick: "lockGroupClick",
+          name: "lockGroup"
+        },
+        {
+          tag: "h1",
+          content: "Who's in the Space?",
+          style: 'text-align: center;'
+        },
+        {
+          kind: "HslLocks.PamelaStatus",
+        },
+        {
+          name: 'loginButton',
+          kind: "onyx.Button",
+          content: "Log in",
+          onclick: "showPopup",
+        }
+
       ]
     },
     {
@@ -117,6 +135,13 @@ enyo.kind({
     } else if(this.jamLock) {
       this.sendToLock();
     }
+
+    this.recalc();
+  },
+
+  recalc: function() {
+    this.reflow();
+    this.render();
   },
 
   // FIXME: needs a better name.
@@ -127,7 +152,7 @@ enyo.kind({
     this.jamLock = false;
 
     // This is a band-aid, yay band-aids
-    // Basically, there's a delay between when OAC unlocks and when it 
+    // Basically, there's a delay between when OAC unlocks and when it
     // admits it's unlocked. This will help make that less noticeable.
     setTimeout(enyo.bind(this,this.getCurrentStatus), 10000);
   },

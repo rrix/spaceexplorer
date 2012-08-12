@@ -1,12 +1,13 @@
 .hsltogglebuttons {
-  width: 50%;
-  font-size:48px;
+  width: 33.33%;
+  font-size: 2em;
+  white-space: nowrap;
 }
 
 .single-center-button {
   width: inherit;
   display: block;
-  margin: 0px auto;
+  margin: 0 auto;
 }
 
 .hidden-button {
@@ -20,4 +21,10 @@
 
 .loginPopup {
   width: 70%
+}
+
+#main_loginButton {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
