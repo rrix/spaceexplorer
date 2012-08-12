@@ -1,10 +1,11 @@
 enyo.kind( {
-  kind: "enyo.Control",
-  name: "HslLocks.PamelaStatus",
-  fit:true,
+  kind:  "enyo.Control",
+  name:  "HslLocks.PamelaStatus",
+  fit:   true,
   style: "text-align: center",
+
   published: {
-    url: "http://172.22.110.17/data.php"
+    url: "http://heatsynclabs.org:1337/data.php"
   },
 
   components: [
@@ -19,7 +20,10 @@ enyo.kind( {
           tag: "h1",
           content: "Who's in the Space?"
         },
-        { fit:true, name: "peopleList" }
+        {
+          fit:  true,
+          name: "peopleList"
+        }
       ]
     }
   ],

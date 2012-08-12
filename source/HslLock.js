@@ -1,38 +1,43 @@
 enyo.kind({
   name: "HslLocks.Main",
   classes: "enyo-fit",
+
   components: [
     {
       kind: "FittableRows",
-      fit: true,
       components: [
-        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup", fit:true},
-        {kind: "HslLocks.PamelaStatus"},
-        {kind: "onyx.Button", content: "Login", onclick: "showPopup" }
+        {kind: "enyo.Signals", onmenubutton: "showPopup"},
+        {kind: "HslLocks.Buttons", onclick: "lockGroupClick", name: "lockGroup"},
+        {kind: "HslLocks.PamelaStatus", fit:true}
       ]
     },
-    {kind: "onyx.Popup", name: "scrim", autoDismiss: false, modal: true, centered: true,
-     components: [
-      {tag: "h1", content: "Please Wait"}
-    ]},
-    {kind: "HslLocks.LoginPopup", name: "loginPopup", onLoginChanged: "loadLoginData"}
+    {
+      kind: "onyx.Popup", name: "scrim", autoDismiss: false, modal: true, centered: true,
+      components: [
+        {tag: "h1", content: "Please Wait"}
+      ]
+    },
+    {
+      kind: "HslLocks.LoginPopup",
+      name: "loginPopup",
+      onLoginChanged: "loadLoginData"
+    }
   ],
 
-  create: function() {
+  rendered: function() {
     this.inherited(arguments);
 
     this.loadLoginData();
-
-    this.getCurrentStatus();
 
     // Blocking timer to prevent people from busting the server jamming on
     // buttons
     this.jamLock = true;
 
     // This refreshes the screen every 30 seconds
-    setInterval( "hsllock.getCurrentStatus()", 30000);
+    setInterval( enyo.bind(this, this.getCurrentStatus), 30000);
 
     // In webOS this makes the loading screen go away
+    // FIXME: Can we make this go away with phonegap.js?
     if( window.PalmSystem ) {
       window.PalmSystem.stageReady();
     }
@@ -41,14 +46,14 @@ enyo.kind({
   loadLoginData: function() {
     // Pull login data from HTML5 localStorage, open the popup if it doesn't
     // exist.
-    loginData = localStorage.getItem("hsllock_loginData")
-    if( loginData) {
+    loginData = localStorage.getItem("hsllock_loginData");
+    if(loginData) {
       loginData = loginData.split("|");
       this.username = loginData[0];
       this.password = loginData[1];
       this.url      = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/access.rb";
     } else {
-      this.$.loginPopup.show();
+      this.showPopup();
     }
 
     this.getCurrentStatus();
@@ -124,7 +129,7 @@ enyo.kind({
     // This is a band-aid, yay band-aids
     // Basically, there's a delay between when OAC unlocks and when it 
     // admits it's unlocked. This will help make that less noticeable.
-    setTimeout("hsllock.getCurrentStatus()", 10000);
+    setTimeout(enyo.bind(this,this.getCurrentStatus), 10000);
   },
 
   showPopup: function() {
