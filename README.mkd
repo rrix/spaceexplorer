@@ -1,0 +1,26 @@
+HSLLock
+=======
+
+This locks and unlocks ths maglock system at HeatSync Labs
+
+It is pretty much guaranteed to not work with any system except the
+one at HeatSync Labs. It queries a custom web interface to 23b's mag
+lock RFID door system.
+
+The code for the web interface interfaces over RS232 with an Open Access
+Control board and can be seen
+[here](https://github.com/zyphlar/Open-Source-Access-Control---Web-Interface).
+
+Building
+========
+
+This is an Enyo Bootplate app, so run
+
+```@bash
+cd tools
+./minify.sh # or minify.bat on windows
+```
+
+And you can stick index.html, assets a and build/ on your server or phone or
+what have you.
+
