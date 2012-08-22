@@ -1,3 +1,4 @@
+/* vim: set foldmethod=indent foldlevel=1: */
 enyo.kind({
   name: "HslLocks.Main",
   classes: "enyo-fit",
@@ -19,12 +20,13 @@ enyo.kind({
         },
         {
           kind: "HslLocks.PamelaStatus",
+          name: "pamelaStatus"
         },
         {
           name: 'loginButton',
           kind: "onyx.Button",
           content: "Log in",
-          onclick: "showPopup",
+          onclick: "showPopup"
         }
 
       ]
@@ -52,7 +54,7 @@ enyo.kind({
     this.jamLock = true;
 
     // This refreshes the screen every 30 seconds
-    setInterval( enyo.bind(this, this.getCurrentStatus), 30000);
+    enyo.job("getCurrentStatus", enyo.bind(this, this.getCurrentStatus), 30000);
 
     // In webOS this makes the loading screen go away
     // FIXME: Can we make this go away with phonegap.js?
@@ -61,20 +63,35 @@ enyo.kind({
     }
   },
 
+  nextState: function() {
+    if(this.state === 0) {
+      this.initState();
+    }
+  },
+
   loadLoginData: function() {
     // Pull login data from HTML5 localStorage, open the popup if it doesn't
     // exist.
-    loginData = localStorage.getItem("hsllock_loginData");
+    var loginData = localStorage.getItem("hsllock_loginData");
     if(loginData) {
-      loginData = loginData.split("|");
-      this.username = loginData[0];
-      this.password = loginData[1];
-      this.url      = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/access.rb";
+      loginData              = loginData.split("|");
+      this.username          = loginData[0];
+      this.password          = loginData[1];
+      this.spaceAPIEndpoint  = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb";
     } else {
       this.showPopup();
     }
 
-    this.getCurrentStatus();
+    this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
+    this.statusAjaxEndpoint.response(this, enyo.bind(this, function(inSender, inResponse) {
+      this.url = inResponse.apis.oac.url;
+      this.spaceAPIData = inResponse;
+      this.$.pamelaStatus.setUrl( this.spaceAPIData.apis.pamela.url );
+
+      this.statusRetrieved(inSender, inResponse);
+    }));
+
+    this.statusAjaxEndpoint.go();
   },
 
   /*
@@ -94,24 +111,21 @@ enyo.kind({
 
   getCurrentStatus: function() {
     // FIXME: Move this to create somehow
-    this.lockAjaxEndpoint = new enyo.Ajax({ url: this.url});
-    this.lockAjaxEndpoint.handleAs = "text";
+    this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
+    this.statusAjaxEndpoint.handleAs = "text";
 
     // FIXME BUG: This is cleared after every successful get
-    this.lockAjaxEndpoint.response(this, "getStatusCompleted");
+    this.statusAjaxEndpoint.response(this, "statusRetrieved");
 
-    this.lockAjaxEndpoint.go({user: this.username, pass: this.password, cmd: "status"});
+    this.statusAjaxEndpoint.go();
   },
 
-  getStatusCompleted: function(inRequest, inResponse) {
-    if( inResponse.match(/State/g) ) {
-      // Turn the last character in to a status
-      lockStatus = /Unlocked.*([0-1])/g.exec( inResponse )[1];
+  statusRetrieved: function(inRequest, inResponse) {
+    var lockStatus = inResponse.open ? "1" : "0";
 
-      if(lockStatus.length > 0) {
-        this.currentStatus = lockStatus;
-        this.updateColor();
-      }
+    if(lockStatus.length > 0) {
+      this.currentStatus = lockStatus;
+      this.updateColor();
     }
 
     this.jamLock = true;
@@ -135,26 +149,21 @@ enyo.kind({
     } else if(this.jamLock) {
       this.sendToLock();
     }
-
-    this.recalc();
-  },
-
-  recalc: function() {
-    this.reflow();
-    this.render();
   },
 
   // FIXME: needs a better name.
   sendToLock: function() {
     this.$.scrim.show();
     this.currentStatus = this.$.lockGroup.value;
+    this.lockAjaxEndpoint = new enyo.Ajax({url: this.url});
     this.lockAjaxEndpoint.go({user: this.username, pass: this.password, cmd: this.$.lockGroup.value});
+    this.lockAjaxEndpoint.handleAs = "text";
     this.jamLock = false;
 
     // This is a band-aid, yay band-aids
     // Basically, there's a delay between when OAC unlocks and when it
     // admits it's unlocked. This will help make that less noticeable.
-    setTimeout(enyo.bind(this,this.getCurrentStatus), 10000);
+    enyo.job("getCurrentStatus", enyo.bind(this,this.getCurrentStatus), 10000);
   },
 
   showPopup: function() {

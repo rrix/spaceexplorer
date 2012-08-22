@@ -33,6 +33,11 @@ enyo.kind( {
     setInterval( enyo.bind(this, this.updateFromPamela), 30000 );
   },
 
+  urlChanged: function() {
+    this.inherited(arguments);
+    this.rebuild();
+  },
+
   updateFromPamela: function() {
     this.pamelaAjax.response( enyo.bind(this,
       function(inRequest, inResponse) {
