@@ -54,7 +54,7 @@ enyo.kind({
     this.jamLock = true;
 
     // This refreshes the screen every 30 seconds
-    enyo.job("getCurrentStatus", enyo.bind(this, this.getCurrentStatus), 30000);
+    setInterval( enyo.bind(this, this.getCurrentStatus), 30000);
 
     // In webOS this makes the loading screen go away
     // FIXME: Can we make this go away with phonegap.js?
@@ -112,7 +112,6 @@ enyo.kind({
   getCurrentStatus: function() {
     // FIXME: Move this to create somehow
     this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
-    this.statusAjaxEndpoint.handleAs = "text";
 
     // FIXME BUG: This is cleared after every successful get
     this.statusAjaxEndpoint.response(this, "statusRetrieved");
@@ -121,7 +120,7 @@ enyo.kind({
   },
 
   statusRetrieved: function(inRequest, inResponse) {
-    var lockStatus = inResponse.open ? "1" : "0";
+    var lockStatus = inResponse.open ? "0" : "1";
 
     if(lockStatus.length > 0) {
       this.currentStatus = lockStatus;
@@ -163,7 +162,7 @@ enyo.kind({
     // This is a band-aid, yay band-aids
     // Basically, there's a delay between when OAC unlocks and when it
     // admits it's unlocked. This will help make that less noticeable.
-    enyo.job("getCurrentStatus", enyo.bind(this,this.getCurrentStatus), 10000);
+    setTimeout( enyo.bind(this,this.getCurrentStatus), 10000);
   },
 
   showPopup: function() {
