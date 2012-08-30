@@ -18,9 +18,9 @@ This is an Enyo Bootplate app, so run
 
 ```@bash
 cd tools
-./minify.sh # or minify.bat on windows
+./deploy.sh # or minify.bat on windows
 ```
 
-And you can stick index.html, assets a and build/ on your server or phone or
-what have you.
+And you can stick the latest deploy/* directory on your server or phone or
+what have you
 
