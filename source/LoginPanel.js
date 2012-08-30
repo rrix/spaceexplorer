@@ -9,7 +9,7 @@ enyo.kind( {
 
   components: [
     {
-      content: "If you need a login to the HeatSyncLabs system, please contact @rrrrrrrix."
+      content: "If you need a login to the HeatSyncLabs system, please contact @rrrrrrrix. Leave Server URL blank unless you know what you're doing."
     },
     {
       style: "width: 95%",
@@ -31,7 +31,8 @@ enyo.kind( {
           fit: true,
           kind: "onyx.Input",
           name: "passwordInput",
-          placeholder: "Password"
+          placeholder: "Password",
+          attributes: { type: "password" }
         }
       ]
     },
