@@ -78,8 +78,6 @@ enyo.kind({
       this.username          = loginData[0];
       this.password          = loginData[1];
       this.spaceAPIEndpoint  = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb";
-    } else {
-      this.showPopup();
     }
 
     this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
