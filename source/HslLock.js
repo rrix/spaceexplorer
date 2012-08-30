@@ -77,7 +77,7 @@ enyo.kind({
       loginData              = loginData.split("|");
       this.username          = loginData[0];
       this.password          = loginData[1];
-      this.spaceAPIEndpoint  = loginData[2] ? loginData[2] : "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb";
+      this.spaceAPIEndpoint  = loginData[2];
     }
 
     this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
@@ -165,5 +165,25 @@ enyo.kind({
 
   showPopup: function() {
     this.$.loginPopup.show();
+  },
+
+  validateData: function(url, username, password, callback) {
+    var apiAjax = new enyo.Ajax( { url: url } );
+
+    apiAjax.response( enyo.bind(this, function(inSender, inResponse) {
+      var loginCheck = new enyo.Ajax( { url: inResponse.apis.oac.url } );
+      loginCheck.response( enyo.bind(this, function(inSender, inResponse) {
+        if( inResponse.login == 'okay' ) {
+          callback(true, url, username, password);
+        } else {
+          callback(false, url, username, password);
+        }
+      }));
+
+      loginCheck.go({ cmd: "check-login", user: username, pass: password });
+    }));
+
+    apiAjax.go();
   }
+
 });

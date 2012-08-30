@@ -12,6 +12,10 @@ enyo.kind( {
       content: "If you need a login to the HeatSyncLabs system, please contact @rrrrrrrix. Leave Server URL blank unless you know what you're doing."
     },
     {
+      name: "errorDiv",
+      style: "color: red;"
+    },
+    {
       style: "width: 95%",
       kind: "onyx.InputDecorator",
       components: [
@@ -52,7 +56,7 @@ enyo.kind( {
       kind: "onyx.Button",
       style: "width: 100%",
       content: "Save",
-      onclick: "saveData"
+      onclick: "checkLogin"
     }
   ],
 
@@ -60,15 +64,33 @@ enyo.kind( {
     onLoginChanged: ""
   },
 
-  saveData: function() {
-    enyo.log("clicK");
-    values = [];
-    values.push(this.$.userInput.hasNode().value);
-    values.push(this.$.passwordInput.hasNode().value);
-    values.push(this.$.urlInput.hasNode().value);
+  checkLogin: function(inSender) {
+    // Possibly insert default
+    if( !this.$.urlInput.hasNode().value ) {
+      this.$.urlInput.hasNode().value =  "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb";
+    }
 
-    localStorage.setItem("hsllock_loginData", values.join("|") );
-    this.hide();
-    this.doLoginChanged();
+    var user = this.$.userInput.hasNode().value;
+    var password = this.$.passwordInput.hasNode().value;
+    var url = this.$.urlInput.hasNode().value;
+
+    this.$.errorDiv.setContent("Logging in...");
+    this.parent.validateData(url, user, password, enyo.bind(this, this.saveData));
+  },
+
+  saveData: function(usernameCorrect, url, username, password) {
+
+    if(!usernameCorrect) {
+      this.$.errorDiv.setContent("Login failed, try again!");
+    } else {
+      values = [];
+      values.push(username);
+      values.push(password);
+      values.push(url);
+
+      localStorage.setItem("hsllock_loginData", values.join("|") );
+      this.hide();
+      this.doLoginChanged();
+    }
   }
 });
