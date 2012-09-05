@@ -1,7 +1,7 @@
 enyo.kind( {
   kind:  "enyo.Control",
   name:  "HslLocks.PamelaStatus",
-  style: "text-align: center; margin-bottom: 35px;",
+  style: "text-align: center",
 
   published: {
     url: "http://heatsynclabs.org:1337/data.php"
