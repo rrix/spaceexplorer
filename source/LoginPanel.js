@@ -20,7 +20,7 @@ enyo.kind( {
       kind: "onyx.InputDecorator",
       components: [
         {
-          fit: true,
+          style: "width: 100%",
           kind: "onyx.Input",
           name: "userInput",
           placeholder: "Username"
@@ -32,7 +32,7 @@ enyo.kind( {
       kind: "onyx.InputDecorator",
       components: [
         {
-          fit: true,
+          style: "width: 100%",
           kind: "onyx.Input",
           name: "passwordInput",
           placeholder: "Password",
@@ -45,7 +45,7 @@ enyo.kind( {
       kind: "onyx.InputDecorator",
       components: [
         {
-          fit: true,
+          style: "width: 100%",
           kind: "onyx.Input",
           name: "urlInput",
           placeholder: "Server URL"
