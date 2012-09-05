@@ -1,7 +1,7 @@
 /* vim: set foldmethod=indent foldlevel=1: */
 enyo.kind({
   name: "HslLocks.Main",
-  classes: "enyo-fit",
+  layoutKind: "FittableRowsLayout",
 
   published: {
     spaceAPIEndpoint: "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb"
@@ -9,32 +9,26 @@ enyo.kind({
 
   components: [
     {
-      kind: "FittableRows",
-      classes: "enyo-fit",
-      components: [
-        {
-          kind: "HslLocks.Buttons",
-          onclick: "lockGroupClick",
-          name: "lockGroup"
-        },
-        {
-          tag: "h1",
-          content: "Who's in the Space?",
-          style: 'text-align: center;'
-        },
-        {
-          kind: "HslLocks.PamelaStatus",
-          name: "pamelaStatus"
-        },
-        {
-          name: 'loginButton',
-          kind: "onyx.Button",
-          content: "Log in",
-          onclick: "showPopup",
-          onLoginChanged: "loadLoginData"
-        }
-
-      ]
+      kind: "HslLocks.Buttons",
+      onclick: "lockGroupClick",
+      name: "lockGroup"
+    },
+    {
+      tag: "h1",
+      content: "Who's in the Space?",
+      style: 'text-align: center;'
+    },
+    {
+      kind: "HslLocks.PamelaStatus",
+      name: "pamelaStatus",
+      style: "height: 69%"
+    },
+    {
+      name: 'loginButton',
+      kind: "onyx.Button",
+      content: "Log in",
+      onclick: "showPopup",
+      onLoginChanged: "loadLoginData"
     },
     {
       kind: "onyx.Popup", name: "scrim", autoDismiss: false, modal: true, centered: true,
