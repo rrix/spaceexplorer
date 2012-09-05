@@ -67,7 +67,7 @@ enyo.kind( {
   checkLogin: function(inSender) {
     // Possibly insert default
     if( !this.$.urlInput.hasNode().value ) {
-      this.$.urlInput.hasNode().value =  "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb";
+      this.$.urlInput.hasNode().value = this.parent.spaceAPIEndpoint;
     }
 
     var user = this.$.userInput.hasNode().value;
@@ -79,7 +79,6 @@ enyo.kind( {
   },
 
   saveData: function(usernameCorrect, url, username, password) {
-
     if(!usernameCorrect) {
       this.$.errorDiv.setContent("Login failed, try again!");
     } else {
@@ -88,7 +87,7 @@ enyo.kind( {
       values.push(password);
       values.push(url);
 
-      localStorage.setItem("hsllock_loginData", values.join("|") );
+      localStorage.setItem("hsllock_loginData_"+this.parent.domain, values.join("|") );
       this.hide();
       this.doLoginChanged();
     }

@@ -3,6 +3,10 @@ enyo.kind({
   name: "HslLocks.Main",
   classes: "enyo-fit",
 
+  published: {
+    spaceAPIEndpoint: "http://intranet.heatsynclabs.org/~access/cgi-bin/spaceapi.rb"
+  },
+
   components: [
     {
       kind: "FittableRows",
@@ -26,7 +30,8 @@ enyo.kind({
           name: 'loginButton',
           kind: "onyx.Button",
           content: "Log in",
-          onclick: "showPopup"
+          onclick: "showPopup",
+          onLoginChanged: "loadLoginData"
         }
 
       ]
@@ -63,21 +68,29 @@ enyo.kind({
     }
   },
 
-  nextState: function() {
-    if(this.state === 0) {
-      this.initState();
-    }
+  hideButtons: function() {
+    this.$.lockGroup.setShowing(false);
+  },
+
+  showButtons: function() {
+    this.$.lockGroup.setShowing(true);
   },
 
   loadLoginData: function() {
     // Pull login data from HTML5 localStorage, open the popup if it doesn't
     // exist.
-    var loginData = localStorage.getItem("hsllock_loginData");
+    this.domain = /http:\/\/((.*).(com|org|net))/.exec(this.spaceAPIEndpoint)[1];
+
+    var loginData = localStorage.getItem("hsllock_loginData_" + this.domain);
     if(loginData) {
       loginData              = loginData.split("|");
       this.username          = loginData[0];
       this.password          = loginData[1];
       this.spaceAPIEndpoint  = loginData[2];
+      this.showButtons();
+    } else {
+      // User is not logged in, hide the lock/unlock buttons
+      this.hideButtons();
     }
 
     this.statusAjaxEndpoint = new enyo.Ajax({ url: this.spaceAPIEndpoint});
