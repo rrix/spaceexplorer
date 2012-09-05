@@ -87,10 +87,13 @@ enyo.kind({
     var fail = false;
 
     if( typeof(inResponse) == "object" ) {
+      if( !this.spaceStatuses[inSender.url] ) {
+        this.fetchedSpaceCount++;
+      }
+
       this.spaceStatuses[inSender.url] = inResponse;
       this.doSpaceFetched({url: inSender.url, response: inResponse});
 
-      this.fetchedSpaceCount++;
       //enyo.log( "Fetched " + inSender.url);
     } else {
       //enyo.log( "Bad error" );

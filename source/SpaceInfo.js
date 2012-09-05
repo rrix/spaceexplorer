@@ -1,8 +1,9 @@
 enyo.kind({
   name: "SpaceAPI.SpaceInfo",
+  fit: true,
   layoutKind: "FittableRowsLayout",
 
-  components: [
+  components: [ // {{{1
     {
       kind: "onyx.Toolbar",
       name: "toolbar",
@@ -14,34 +15,9 @@ enyo.kind({
       ]
     },
     {
-      layoutKind: "FittableColumnsLayout",
-      fit:true,
-
-      components: [
-        {
-          kind: "BingMap",
-          name: "bmap",
-          showPin: true,
-          fit:  true,
-          credentials: "AqLEGecLaJ9OSG5VoiKoYxzAHBqdgXU3DR3k3H_Gq-Fi4z-MESB-N-7g4q--Z0bh"
-        },
-        {
-          style: "width: 50%",
-          components: [
-            {
-              name: "spaceName"
-            },
-            {
-              tag: 'a',
-              name: "twitterHandle",
-              attributes: {href: "http://twitter.com/"}
-            },
-            {
-              name: "status"
-            }
-          ]
-        }
-      ]
+      kind: 'HslLocks.Main',
+      spaceAPIEndpoint: this.url,
+      fit: true
     },
     {
       kind: "onyx.Toolbar",
@@ -51,29 +27,18 @@ enyo.kind({
         {
           name:    "returnButton",
           kind:    "onyx.Button",
-          content: "Return",
+          content: "Return to Space list",
           onclick: "goBack",
           style:   "float: right;"
         }
       ]
     }
   ],
+  // }}}1
 
   update: function() {
     var space = this.space;
     if( space ) {
-      this.$.bmap.setLatitude( space.lat );
-      this.$.bmap.setLongitude( space.lon );
-      this.$.bmap.createPushpin( space.lat, space.lon );
-      this.$.bmap.setZoom( 13 );
-
-      this.$.spaceName.setContent( space.space );
-      this.$.status.setContent( space.status );
-
-      this.$.twitterHandle.attributes.href =  "http://twitter.com/" + space.contact.twitter;
-      this.$.twitterHandle.setContent( space.contact.twitter );
-      this.$.twitterHandle.render();
-
       this.$.toolbarText.setContent( space.space );
     }
     this.inherited(arguments);

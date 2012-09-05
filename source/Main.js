@@ -3,7 +3,11 @@ enyo.kind({
   kind: "FittableRows",
   classes: "enyo-fit",
 
-  components:[
+  published: {
+    lastSpace: ""
+  },
+
+  components:[ // {{{1
     {
       kind: "Signals"
     },
@@ -11,11 +15,6 @@ enyo.kind({
       kind: "SpaceAPI.Spaces",
       name: "spaces",
       onSpacesFetched: "spacesFetched"
-    },
-    {
-      kind: "onyx.Toolbar",
-      content: "SpaceAPI Explorer",
-      style: 'height: 7%'
     },
     {
       name: "geolocation",
@@ -30,8 +29,9 @@ enyo.kind({
     {
       kind: "Panels",
       name: "panel",
-      style: 'height: 93%',
+      style: 'height: 100%',
       arrangerKind: "PageSpinArranger",
+      layoutKind: "FittableRowsLayout",
       components: [
         {
           kind: "SpaceAPI.Scroller",
@@ -42,7 +42,8 @@ enyo.kind({
         },
         {
           kind: "SpaceAPI.SpaceInfo",
-          name: "spaceInfo"
+          name: "spaceInfo",
+          style: "height: 100%"
         }
       ]
     },
@@ -62,11 +63,16 @@ enyo.kind({
       ]
     }
   ],
+  // }}}1
 
   create: function() {
     this.inherited(arguments);
-
-    this.$.spaces.go();
+    this.lastSpace = localStorage.getItem("lastSpace");
+    if (this.lastSpace) {
+      this.fetchAndOpenSpace(this.lastSpace);
+    } else {
+      this.$.spaces.go();
+    }
   },
 
   locationFetched: function(inSender, inPosition) {
@@ -142,8 +148,30 @@ enyo.kind({
     var url = this.$.spaces.directoryData[inEvent.index];
     var space = this.$.spaces.spaceStatuses[url];
 
+    this.openSpace(null, {response: space, url: url});
+  },
+
+  fetchAndOpenSpace: function( space ) {
+    this.$.spaces.onSpaceFetched = "openSpace";
+
+    this.$.spaces.fetchSpace( space );
+  },
+
+  openSpace: function(sender, data ){
+    var space = data.response;
+    var url   = data.url;
+
+    this.$.loadingScrim.addStyles("display: none");
+    this.$.spaceInfo.url = url;
     this.$.spaceInfo.space = space;
     this.$.spaceInfo.update();
+    this.setLastSpace(url);
+
     this.$.panel.next();
+  },
+
+  setLastSpace: function(newSpace) {
+    localStorage.setItem("lastSpace", newSpace);
+    this.inherited(arguments);
   }
 });
