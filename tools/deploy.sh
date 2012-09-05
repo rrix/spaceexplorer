@@ -41,10 +41,13 @@ EOF
 mkdir -p "$TARGET/lib"
 
 # copy root folder files
-cp "$SOURCE/index.html" "$SOURCE/icon.png" "$TARGET"
+cp "$SOURCE/index.html"  "$TARGET"
 
 # copy assets and build
 cp -r "$SOURCE/assets" "$SOURCE/build" "$TARGET"
+
+# copy appinfo.json
+cp -r "$SOURCE/appinfo.json" "$SOURCE/build" "$TARGET"
 
 for i in $SOURCE/lib/*; do
 	o=${i##*/}
@@ -56,3 +59,6 @@ for i in $SOURCE/lib/*; do
 		cp -r $i "$TARGET/lib"
 	fi
 done
+
+# build icons
+cd $SOURCE && sh ./tools/make_icons.sh ; cd -

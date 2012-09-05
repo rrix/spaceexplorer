@@ -1,0 +1,30 @@
+.hsltogglebuttons {
+  width: 33.33%;
+  font-size: 2em;
+  white-space: nowrap;
+}
+
+.single-center-button {
+  width: inherit;
+  display: block;
+  margin: 0 auto;
+}
+
+.hidden-button {
+  display: none
+}
+
+.buttonWrap {
+  width: 100%;
+  display: block;
+}
+
+.loginPopup {
+  width: 70%
+}
+
+#main_loginButton {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+}

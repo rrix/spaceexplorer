@@ -1,13 +1,23 @@
 enyo.depends(
-  "$lib/layout",
-  "$lib/onyx",
   "$lib/canvas-spinner",
-  "$lib/more-arrangers",
   "$lib/geolocation",
+  "$lib/layout",
   "$lib/maps",
+  "$lib/more-arrangers",
+  "$lib/onyx",
+
+  // Application
+  "Buttons.js",
+  "HslLock.js",
+  "LoginPanel.js",
   "Main.css",
   "Main.js",
+  "PamelaStatus.js",
+  "Scroller.js"
   "SpaceInfo.js",
   "Spaces.js",
-  "Scroller.js"
+
+  // CSS
+  "Buttons.css",
+  "hsllock.css"
 );
