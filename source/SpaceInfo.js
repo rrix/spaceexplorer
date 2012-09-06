@@ -1,7 +1,12 @@
+/* vim: set foldmethod=marker foldlevel=0: */
 enyo.kind({
   name: "SpaceAPI.SpaceInfo",
   fit: true,
   layoutKind: "FittableRowsLayout",
+
+  published: {
+    space: {}
+  },
 
   components: [ // {{{1
     {
@@ -16,6 +21,7 @@ enyo.kind({
     },
     {
       kind: 'HslLocks.Main',
+      name: 'lockSystem',
       spaceAPIEndpoint: this.url,
       fit: true
     },
@@ -38,14 +44,23 @@ enyo.kind({
 
   update: function() {
     var space = this.space;
-    if( space ) {
+    if( space.space ) {
+      console.log();
       this.$.toolbarText.setContent( space.space );
+      this.$.lockSystem.spaceAPIEndpoint = this.url;
+      this.$.lockSystem.setSpace( space );
+      this.$.lockSystem.render();
     }
     this.inherited(arguments);
   },
 
   goBack: function() {
     this.parent.previous();
+  },
+
+  setSpace: function(data) {
+    this.space = data;
+    this.update();
   }
 
 });
