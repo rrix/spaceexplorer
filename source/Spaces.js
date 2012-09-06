@@ -42,7 +42,7 @@ enyo.kind({
 
   directoryFetchFailure: function( inSender, inResponse ) {
     this.state = "directoryFetchFailed";
-    doFetchError();
+    this.doFetchError();
   },
 
   size: function() {
@@ -127,11 +127,9 @@ enyo.kind({
       var spaceB = this.spaceStatuses[b];
 
       if( !(spaceA.lon && spaceA.lon) ) {
-        enyo.log(spaceA.space + " doesn't have geodata :(" );
         return 1;
       }
       if( !(spaceB.lon && spaceB.lon) ) {
-        enyo.log(spaceB.space + " doesn't have geodata :(" );
         return -1;
       }
 
