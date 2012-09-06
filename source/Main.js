@@ -1,3 +1,4 @@
+/* vim: set foldmethod=marker foldlevel=0: */
 enyo.kind({
   name: "SpaceAPI.Main",
   kind: "FittableRows",
@@ -69,12 +70,15 @@ enyo.kind({
     this.inherited(arguments);
     this.lastSpace = localStorage.getItem("lastSpace");
     if (this.lastSpace) {
+      this.careAboutFetch = true;
       this.fetchAndOpenSpace(this.lastSpace);
+      setTimeout(enyo.bind(this.$.spaces, this.$.spaces.go), 3000); // Load main area after 10 seconds
     } else {
       this.$.spaces.go();
     }
   },
 
+  // Geolocation {{{1
   locationFetched: function(inSender, inPosition) {
     this.coords = {x: inPosition.coords.latitude,
                    y: inPosition.coords.longitude};
@@ -87,7 +91,9 @@ enyo.kind({
     this.coords = {x: 0, y: 0};
     this.geolocated = true;
   },
+  // }}}1 
 
+  // Sorting and setting up scroller list {{{1
   spacesFetched: function( inSender ) {
     if( this.geolocated ) {
       this.$.spaces.sort( enyo.bind(this, function(a,b) {
@@ -109,11 +115,12 @@ enyo.kind({
 
       this.$.loadingScrim.addStyles("display: none");
 
-      this.$.dataScroller.setCount( inSender.spaceCount);
+      this.$.dataScroller.setCount( this.$.spaces.spaceCount);
       this.$.dataScroller.reset();
+
     } else {
       // We don't have a location yet, wait 1 second and fire again
-      setInterval(enyo.bind(this, "spacesFetched"), 1000);
+      setTimeout(enyo.bind(this, "spacesFetched"), 1000);
     }
   },
 
@@ -143,6 +150,7 @@ enyo.kind({
 
     inSender.$.item.space = space;
   },
+  // }}}1
 
   spaceSelected: function(inSender, inEvent) {
     var url = this.$.spaces.directoryData[inEvent.index];
@@ -153,21 +161,26 @@ enyo.kind({
 
   fetchAndOpenSpace: function( space ) {
     this.$.spaces.onSpaceFetched = "openSpace";
+    this.fetch =true;
 
     this.$.spaces.fetchSpace( space );
   },
 
   openSpace: function(sender, data ){
-    var space = data.response;
-    var url   = data.url;
+    if(this.fetch || sender != this.$.spaces) {
+      var space = data.response;
+      var url   = data.url;
 
-    this.$.loadingScrim.addStyles("display: none");
-    this.$.spaceInfo.url = url;
-    this.$.spaceInfo.space = space;
-    this.$.spaceInfo.update();
-    this.setLastSpace(url);
+      this.$.loadingScrim.addStyles("display: none");
+      this.$.spaceInfo.url = url;
+      this.$.spaceInfo.setSpace( space );
+      this.$.spaceInfo.update();
+      this.setLastSpace(url);
 
-    this.$.panel.next();
+      this.$.panel.next();
+      this.$.spaces.onSpaceFetched = "";
+      this.fetch = false;
+    }
   },
 
   setLastSpace: function(newSpace) {
