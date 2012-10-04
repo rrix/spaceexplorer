@@ -100,7 +100,7 @@ enyo.kind({
       this.spaceFetchFailed(inSender);
     }
 
-    if( this.fetchedSpaceCount == this.spaceCount ) {
+    if( this.fetchedSpaceCount >= this.spaceCount -1 ) {
       this.state = "spacesFetched";
       this.doSpacesFetched();
     }
@@ -115,7 +115,7 @@ enyo.kind({
 
     this.doFetchError(inSender, inSender.url);
 
-    if( this.fetchedSpaceCount == this.spaceCount ) {
+    if( this.fetchedSpaceCount == this.spaceCount -1 ) {
       this.state = "spacesFetched";
       this.doSpacesFetched();
     }
@@ -126,10 +126,10 @@ enyo.kind({
       var spaceA = this.spaceStatuses[a];
       var spaceB = this.spaceStatuses[b];
 
-      if( !(spaceA.lon && spaceA.lon) ) {
+      if( spaceA && !(spaceA.lon && spaceA.lon) ) {
         return 1;
       }
-      if( !(spaceB.lon && spaceB.lon) ) {
+      if( spaceB && !(spaceB.lon && spaceB.lon) ) {
         return -1;
       }
 

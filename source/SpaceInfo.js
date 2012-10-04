@@ -20,10 +20,7 @@ enyo.kind({
       ]
     },
     {
-      kind: 'HslLocks.Main',
-      name: 'lockSystem',
-      spaceAPIEndpoint: this.url,
-      fit: true
+      name: 'containerDiv'
     },
     {
       kind: "onyx.Toolbar",
@@ -41,17 +38,37 @@ enyo.kind({
     }
   ],
   // }}}1
+  
+  rendered: function() {
+    this.inherited(arguments);
+    this.update();
+  },
 
   update: function() {
     var space = this.space;
     if( space.space ) {
-      console.log();
       this.$.toolbarText.setContent( space.space );
-      this.$.lockSystem.spaceAPIEndpoint = this.url;
-      this.$.lockSystem.setSpace( space );
-      this.$.lockSystem.render();
+      if(!this.$.containerDiv.children.length && space.apis) {
+        if(space.apis.oac) {
+          this.$.containerDiv.createComponent( {
+            kind: 'HslLocks.Main',
+            name: 'lockSystem',
+            spaceAPIEndpoint: this.url,
+            fit: true
+          }, {owner: this});
+          this.$.lockSystem.setSpace( space );
+        } if(space.apis.pamela) {
+          this.$.containerDiv.createComponent( {
+            kind: 'HslLocks.PamelaStatus',
+            name: 'pamela',
+            url:  space.apis.pamela.url
+          }, {owner: this});
+        }
+      }
+
+      this.updateColor(space.open);
+      this.$.containerDiv.render();
     }
-    this.inherited(arguments);
   },
 
   goBack: function() {
@@ -60,7 +77,21 @@ enyo.kind({
 
   setSpace: function(data) {
     this.space = data;
+    this.$.containerDiv.destroyClientControls();
     this.update();
+  },
+
+  /*
+   * This function handles updating the UI based on the currentStatus
+   */
+  updateColor: function(isOpen) {
+    if(!isOpen){
+      this.addClass("closedSpace");
+      this.removeClass("openSpace");
+    } else {
+      this.addClass("openSpace");
+      this.removeClass("closedSpace");
+    }
   }
 
 });

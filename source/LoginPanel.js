@@ -75,7 +75,12 @@ enyo.kind( {
     var url = this.$.urlInput.hasNode().value;
 
     this.$.errorDiv.setContent("Logging in...");
-    this.parent.validateData(url, user, password, enyo.bind(this, this.saveData));
+    var ajax = new enyo.Ajax({url: url});
+    ajax.response(enyo.bind(this,function(inSender, inResponse) {
+      this.parent.validateData(inResponse.apis.oac.url, user, password, enyo.bind(this, this.saveData));
+    }));
+
+    ajax.go();
   },
 
   saveData: function(usernameCorrect, url, username, password) {

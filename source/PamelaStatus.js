@@ -4,10 +4,15 @@ enyo.kind( {
   style: "text-align: center",
 
   published: {
-    url: "http://heatsynclabs.org:1337/data.php"
+    url: ""
   },
 
   components: [
+    {
+      tag: "h1",
+      content: "Who's in the Space?",
+      style: 'text-align: center;color: white'
+    },
     {
       kind:  "Scroller",
       name:  "pamelaScroller",
@@ -25,16 +30,20 @@ enyo.kind( {
   create: function() {
     this.inherited(arguments);
 
-    this.pamelaItems = [];
-
-    this.pamelaAjax = new enyo.Ajax( { url: this.url } );
-    this.updateFromPamela();
-    setInterval( enyo.bind(this, this.updateFromPamela), 30000 );
+    this.urlChanged();
   },
 
   urlChanged: function() {
     this.inherited(arguments);
-    this.rebuild();
+    if( this.url && this.url.length ) {
+      this.pamelaItems = [];
+
+      this.pamelaAjax = new enyo.Ajax( { url: this.url } );
+      this.updateFromPamela();
+      setInterval( enyo.bind(this, this.updateFromPamela), 30000 );
+
+      this.rebuild();
+    }
   },
 
   updateFromPamela: function() {
@@ -47,18 +56,20 @@ enyo.kind( {
   },
 
   rebuild: function( data ) {
-    this.$.peopleList.destroyComponents();
+    if( this.controls.length > 0 && this.pamelaItems ) {
+      this.$.peopleList.destroyComponents();
 
-    if( !data ) {
-      this.pamelaItems[i] = this.$.peopleList.createComponent({content: "No one... :("} );
-    } else {
-      for( var i = 0; i < data.length; i++) {
-        if( !/^\./.exec(data[i]) ) {
-          this.pamelaItems.push( this.$.peopleList.createComponent({content: data[i]} ) );
+      if( !data ) {
+        this.pamelaItems[i] = this.$.peopleList.createComponent({content: "No one... :("} );
+      } else {
+        for( var i = 0; i < data.length; i++) {
+          if( !/^\./.exec(data[i]) ) {
+            this.pamelaItems.push( this.$.peopleList.createComponent({content: data[i]} ) );
+          }
         }
       }
-    }
 
-    this.render();
+      this.render();
+    }
   }
 });

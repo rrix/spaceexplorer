@@ -15,16 +15,6 @@ enyo.kind({
       name: "lockGroup"
     },
     {
-      tag: "h1",
-      content: "Who's in the Space?",
-      style: 'text-align: center;color: white'
-    },
-    {
-      kind: "HslLocks.PamelaStatus",
-      name: "pamelaStatus",
-      style: "height: 69%; color:white"
-    },
-    {
       name: 'loginButton',
       kind: "onyx.Button",
       content: "Log in",
@@ -55,28 +45,24 @@ enyo.kind({
     this.jamLock = true;
 
     // This refreshes the screen every 30 seconds
-    setInterval( enyo.bind(this, this.getCurrentStatus), 30000);
+    if(!this.intervalID) {
+      this.intervalID = setInterval( enyo.bind(this, this.getCurrentStatus), 30000);
+    }
   },
 
   // OAC Functionality {{{1
   // This checks our OAC login.
   validateData: function(url, username, password, callback) {
-    var apiAjax = new enyo.Ajax( { url: url } );
-
-    apiAjax.response( enyo.bind(this, function(inSender, inResponse) {
-      var loginCheck = new enyo.Ajax( { url: inResponse.apis.oac.url } );
-      loginCheck.response( enyo.bind(this, function(inSender, inResponse) {
-        if( inResponse.login == 'okay' ) {
-          callback(true, url, username, password);
-        } else {
-          callback(false, url, username, password);
-        }
-      }));
-
-      loginCheck.go({ cmd: "check-login", user: username, pass: password });
+    var loginCheck = new enyo.Ajax( { url: url } );
+    loginCheck.response( enyo.bind(this, function(inSender, inResponse) {
+      if( inResponse.login == 'okay' ) {
+        callback(true, url, username, password);
+      } else {
+        callback(false, url, username, password);
+      }
     }));
 
-    apiAjax.go();
+    loginCheck.go({ cmd: "check-login", user: username, pass: password });
   },
 
   // This loads our login data from localStorage
@@ -110,13 +96,8 @@ enyo.kind({
       this.oacUrl = undefined;
     }
     this.spaceAPIData = inResponse;
-    if (this.spaceAPIData.apis && this.spaceAPIData.apis.pamela ) {
-      this.$.pamelaStatus.setUrl( this.spaceAPIData.apis.pamela.url );
-    } else {
-      this.$.pamelaStatus.setUrl( undefined );
-    }
 
-    this.statusRetrieved(inSender, inResponse);
+    this.statusRetrieved(inSender||this, inResponse);
   },
 
   // FIXME: needs a better name.
@@ -136,27 +117,13 @@ enyo.kind({
   // }}}1
 
   hideButtons: function() {
-    this.$.lockGroup.setShowing(false);
+    if(this.$.lockGroup) 
+      this.$.lockGroup.setShowing(false);
   },
 
   showButtons: function() {
-    this.$.lockGroup.setShowing(true);
-  },
-
-
-  /*
-   * This function handles updating the UI based on the currentStatus
-   */
-  updateColor: function() {
-    if(this.currentStatus == "1"){
-      this.$.lockGroup.locked();
-      this.addClass("closedSpace");
-      this.removeClass("openSpace");
-    } else {
-      this.$.lockGroup.unlocked();
-      this.addClass("openSpace");
-      this.removeClass("closedSpace");
-    }
+    if(this.$.lockGroup) 
+      this.$.lockGroup.setShowing(true);
   },
 
   // Status retrieval {{{1
@@ -173,16 +140,23 @@ enyo.kind({
   statusRetrieved: function(inRequest, inResponse) {
     var lockStatus = inResponse.open ? "0" : "1";
 
-    if(lockStatus.length > 0) {
-      this.currentStatus = lockStatus;
-      this.updateColor();
-    }
+    this.currentStatus = lockStatus;
 
     this.jamLock = true;
     this.updateColor();
 
     this.$.scrim.hide();
   }, // }}}1
+
+  updateColor: function() {
+    if(this.currentStatus == "1"){
+      this.$.lockGroup.locked();
+      this.owner.updateColor(false);
+    } else {
+      this.$.lockGroup.unlocked();
+      this.owner.updateColor(true);
+    }
+  },
 
   lockGroupClick: function(inSender, e) {
     if( this.$.lockGroup.value == "toggle" )
