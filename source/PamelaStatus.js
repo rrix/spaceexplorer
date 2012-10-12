@@ -21,7 +21,7 @@ enyo.kind( {
       components: [
         {
           name: "peopleList",
-          style: "height: 100%"
+          style: "color: white; height: 100%"
         }
       ]
     }
