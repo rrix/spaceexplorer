@@ -31,7 +31,7 @@ enyo.kind({
       kind: "Panels",
       name: "panel",
       style: 'height: 100%',
-      arrangerKind: "PageSpinArranger",
+      arrangerKind: "PushPopArranger",
       layoutKind: "FittableRowsLayout",
       components: [
         {
@@ -117,6 +117,8 @@ enyo.kind({
 
       this.$.dataScroller.setCount( this.$.spaces.spaceCount);
       this.$.dataScroller.reset();
+
+      this.$.spaceInfo.spacesFetched();
 
     } else {
       // We don't have a location yet, wait 1 second and fire again
