@@ -6,6 +6,9 @@ enyo.depends(
   "$lib/layout",
   "$lib/more-arrangers",
   "$lib/onyx",
+  "$lib/MacFJA-enyo2-lib/onyx/LevelProgress.js",
+  "$lib/MacFJA-enyo2-lib/onyx/RatingLevel.js",
+  "TabPanels.js",
 
   // Application
   "Buttons.js",
@@ -20,5 +23,7 @@ enyo.depends(
   // CSS
   "Main.css",
   "Buttons.css",
-  "hsllock.css"
+  "hsllock.css",
+  "$lib/MacFJA-enyo2-lib/onyx/css/RatingLevel.css",
+  "$lib/MacFJA-enyo2-lib/onyx/css/LevelProgress.css"
 );
