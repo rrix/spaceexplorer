@@ -119,11 +119,13 @@ enyo.kind({
   hideButtons: function() {
     if(this.$.lockGroup) 
       this.$.lockGroup.setShowing(false);
+      this.$.loginButton.setShowing(true);
   },
 
   showButtons: function() {
     if(this.$.lockGroup) 
       this.$.lockGroup.setShowing(true);
+      this.$.loginButton.setShowing(false);
   },
 
   // Status retrieval {{{1
