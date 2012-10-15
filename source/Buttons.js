@@ -11,20 +11,20 @@ enyo.kind({
         {
           name:     "lockedButton",
           content:  "Locked",
-          classes:  "onyx-affirmative hsltogglebuttons",
+          classes:  "hsltogglebuttons",
           value:    "lock",
           onclick:  "emitLockedClick"
         },
         {
           name:     "unlockedButton",
           content:  "Unlocked",
-          classes:  "onyx-negative hsltogglebuttons",
+          classes:  "hsltogglebuttons",
           value:    "unlock",
           onclick:  "emitUnlockedClick"
         },
         {
           name: "quickToggle",
-          content: "Open for 30 seconds",
+          content: "Quick Open",
           classes: "hsltogglebuttons",
           value: "toggle",
           onclick: "emitToggleClick"
