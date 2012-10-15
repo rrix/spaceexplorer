@@ -20,12 +20,8 @@ enyo.kind({
         },
         {
           name: 'scrollProgress',
-          kind: "onyx.RatingLevel",
-          style: "height: 16px; float: right;",
-          minimum:0,
-          maximum: 5,
-          value: 2,
-          editable: false
+          kind: "PanelProgress",
+          style: "height: 16px; float: right;"
         }
       ]
     },
@@ -55,6 +51,8 @@ enyo.kind({
   
   create: function() {
     this.inherited(arguments);
+
+    this.$.scrollProgress.setPanel(this.parent);
   },
   
   rendered: function() {
@@ -93,6 +91,7 @@ enyo.kind({
               fit:  true
             });
           }
+
           if(tab1.components.length) {
             this.$.containerDiv.createComponent(tab1, {owner: this});
             if( this.$.lockSystem ) {
@@ -102,14 +101,14 @@ enyo.kind({
         }
 
         this.updateColor(space.open);
+
         this.$.containerDiv.render();
+        this.$.scrollProgress.render();
 
-    console.log(this);
-
-    this.$.bmap.setLatitude( space.lat );
-    this.$.bmap.setLongitude( space.lon );
-    this.$.bmap.createPushpin( space.lat, space.lon );
-    this.$.bmap.setZoom( 13 );
+        this.$.bmap.setLatitude( space.lat );
+        this.$.bmap.setLongitude( space.lon );
+        this.$.bmap.createPushpin( space.lat, space.lon );
+        this.$.bmap.setZoom( 13 );
       }
     }
   },
@@ -141,14 +140,14 @@ enyo.kind({
           tag: 'h2',
           fit: true,
           style: 'line-height: 75px',
-          content: "We're open! :)"
+          content: inSpace.status? inSpace.status : "We're open! :)"
         });
       } else {
         innerComponent.components.push({
           tag: 'h2',
           fit: true,
           style: 'line-height: 75px',
-          content: "We're closed! :("
+          content: inSpace.status? inSpace.status : "We're closed! :("
         });
       }
 

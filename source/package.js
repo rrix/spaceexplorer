@@ -14,11 +14,12 @@ enyo.depends(
   "Buttons.js",
   "HslLock.js",
   "LoginPanel.js",
-  "Main.js",
+  "PanelProgress.js",
   "PamelaStatus.js",
   "Scroller.js",
   "SpaceInfo.js",
   "Spaces.js",
+  "Main.js",
 
   // CSS
   "Main.css",
